@@ -14,6 +14,10 @@ Whether you're running an AI chatbot, a content generator, or any application th
 
 Unlock the power of accurate token count understanding with TokenEvaluator.Net - the essential tool for AI developers.
 
+### Build Status
+
+[![TokenEvaluator.NET Build and Unit Tests](https://github.com/JoeTomkinson/TokenEvaluator.Net/actions/workflows/dotnet-desktop.yml/badge.svg)](https://github.com/JoeTomkinson/TokenEvaluator.Net/actions/workflows/dotnet-desktop.yml)
+
 # Getting Started
 
 TokenEvaluator.Net can be used via dependency injection, or an instance can be created using a tightly-coupled factory class.
