@@ -7,6 +7,7 @@ namespace TokenEvaluator.Tests
     {
         internal readonly IServiceCollection services = new ServiceCollection();
         internal ServiceProvider? serviceProvider;
+        internal ITokenEvaluatorClient? tokenClient;
 
         [TestInitialize]
         public void Init()
@@ -15,6 +16,10 @@ namespace TokenEvaluator.Tests
             services.AddTextTokenizationEvaluatorServices();
             services.AddSingleton<ITokenEvaluatorClient, TokenEvaluatorClient>();
             serviceProvider = services.BuildServiceProvider();
+
+            // get the token client.
+            tokenClient = serviceProvider.GetService<ITokenEvaluatorClient>();
+            tokenClient?.OverridePairedByteEncodingDirectory(Path.Combine(Environment.CurrentDirectory, "TestDataFolder"));
         }
 
         [TestMethod]
@@ -25,8 +30,6 @@ namespace TokenEvaluator.Tests
                 Assert.Fail("Service Provider Null");
             }
 
-            // test we can retrieve the references to the interfaces.
-            var tokenClient = serviceProvider.GetService<ITokenEvaluatorClient>();
             if (tokenClient != null)
             {
                 await tokenClient.SetDefaultTokenEncodingAsync(EncodingType.Cl100kBase);
@@ -47,8 +50,6 @@ namespace TokenEvaluator.Tests
                 Assert.Fail("Service Provider Null");
             }
 
-            // test we can retrieve the references to the interfaces.
-            var tokenClient = serviceProvider.GetService<ITokenEvaluatorClient>();
             if (tokenClient != null)
             {
                 await tokenClient.SetDefaultTokenEncodingAsync(EncodingType.P50kBase);
@@ -69,8 +70,6 @@ namespace TokenEvaluator.Tests
                 Assert.Fail("Service Provider Null");
             }
 
-            // test we can retrieve the references to the interfaces.
-            var tokenClient = serviceProvider.GetService<ITokenEvaluatorClient>();
             if (tokenClient != null)
             {
                 await tokenClient.SetDefaultTokenEncodingForModelAsync(ModelType.TextDavinci003);
@@ -91,8 +90,6 @@ namespace TokenEvaluator.Tests
                 Assert.Fail("Service Provider Null");
             }
 
-            // test we can retrieve the references to the interfaces.
-            var tokenClient = serviceProvider.GetService<ITokenEvaluatorClient>();
             if (tokenClient != null)
             {
                 await tokenClient.SetDefaultTokenEncodingForModelAsync(ModelType.Gpt3_5Turbo);

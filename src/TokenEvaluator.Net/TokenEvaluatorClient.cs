@@ -135,6 +135,7 @@ public class TokenEvaluatorClient : ITokenEvaluatorClient
     public void OverridePairedByteEncodingDirectory(string directoryPath)
     {
         _pairedByteEncodingDirectory = directoryPath;
+        EncodingService?.SetPairedByteEncodingDirectory(_pairedByteEncodingDirectory);
     }
 
     /// <summary>

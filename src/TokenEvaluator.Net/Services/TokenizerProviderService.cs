@@ -55,15 +55,11 @@ internal class TokenizerProviderService : BaseTokenizerProvider
     /// <returns></returns>
     /// <exception cref="FormatException"></exception>
     /// <exception cref="InvalidOperationException"></exception>
-    public override async Task<Dictionary<byte[], int>>? LoadFromUrlOrCacheAsync(EncodingType encodingType, string? cacheLocation)
+    public override async Task<Dictionary<byte[], int>>? LoadFromUrlOrCacheAsync(EncodingType encodingType)
     {
-        var directory = string.IsNullOrEmpty(cacheLocation) ?
-            PairedByteEncodingDirectory :
-            cacheLocation;
-
-        if (!Directory.Exists(directory))
+        if (!Directory.Exists(PairedByteEncodingDirectory))
         {
-            Directory.CreateDirectory(directory);
+            Directory.CreateDirectory(PairedByteEncodingDirectory);
         }
 
         string url = encodingType switch
@@ -73,7 +69,7 @@ internal class TokenizerProviderService : BaseTokenizerProvider
             _ => throw new ArgumentException($"Unsupported encoding type: {encodingType}"),
         };
         var fileName = Path.GetFileName(url);
-        var localFilePath = Path.Combine(directory, fileName);
+        var localFilePath = Path.Combine(PairedByteEncodingDirectory, fileName);
 
         if (!File.Exists(localFilePath))
         {

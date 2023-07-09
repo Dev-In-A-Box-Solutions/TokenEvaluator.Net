@@ -8,13 +8,19 @@ public class PerformanceTests
 {
     internal readonly IServiceCollection services = new ServiceCollection();
     internal ServiceProvider? serviceProvider;
+    internal ITokenEvaluatorClient? tokenClient;
 
     [TestInitialize]
     public void Init()
     {
+        // init a service collection, run the extension method to add the library services, and build the service provider
         services.AddTextTokenizationEvaluatorServices();
         services.AddSingleton<ITokenEvaluatorClient, TokenEvaluatorClient>();
         serviceProvider = services.BuildServiceProvider();
+
+        // get the token client.
+        tokenClient = serviceProvider.GetService<ITokenEvaluatorClient>();
+        tokenClient?.OverridePairedByteEncodingDirectory(Path.Combine(Environment.CurrentDirectory, "TestDataFolder"));
     }
 
     [TestMethod]
@@ -25,7 +31,6 @@ public class PerformanceTests
             Assert.Fail("Service Provider Null");
         }
 
-        var tokenClient = serviceProvider.GetService<ITokenEvaluatorClient>();
         if (tokenClient == null)
         {
             Assert.Fail("Token Client Null");
@@ -61,7 +66,6 @@ public class PerformanceTests
             Assert.Fail("Service Provider Null");
         }
 
-        var tokenClient = serviceProvider.GetService<ITokenEvaluatorClient>();
         if (tokenClient == null)
         {
             Assert.Fail("Token Client Null");
@@ -102,7 +106,6 @@ public class PerformanceTests
             Assert.Fail("Service Provider Null");
         }
 
-        var tokenClient = serviceProvider.GetService<ITokenEvaluatorClient>();
         if (tokenClient == null)
         {
             Assert.Fail("Token Client Null");
@@ -136,7 +139,6 @@ public class PerformanceTests
             Assert.Fail("Service Provider Null");
         }
 
-        var tokenClient = serviceProvider.GetService<ITokenEvaluatorClient>();
         if (tokenClient == null)
         {
             Assert.Fail("Token Client Null");
@@ -172,7 +174,6 @@ public class PerformanceTests
             Assert.Fail("Service Provider Null");
         }
 
-        var tokenClient = serviceProvider.GetService<ITokenEvaluatorClient>();
         if (tokenClient == null)
         {
             Assert.Fail("Token Client Null");
@@ -215,7 +216,6 @@ public class PerformanceTests
             Assert.Fail("Service Provider Null");
         }
 
-        var tokenClient = serviceProvider.GetService<ITokenEvaluatorClient>();
         if (tokenClient == null)
         {
             Assert.Fail("Token Client Null");
