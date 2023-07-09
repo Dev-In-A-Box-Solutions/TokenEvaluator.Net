@@ -6,19 +6,19 @@ namespace TokenEvaluator.Tests;
 public class FactoryInstanceTests
 {
     [TestMethod]
-    public void FactoryCL100K()
+    public async Task FactoryCL100K()
     {
         var client = TokenEvaluatorClientFactory.Create();
-        client.SetDefaultTokenEncoding(EncodingType.Cl100kBase);
+        await client.SetDefaultTokenEncodingAsync(EncodingType.Cl100kBase);
         var tokenCount = client.EncodedTokenCount(Constants.GeneratedText);
         Assert.AreEqual(tokenCount, 45);
     }
 
     [TestMethod]
-    public void FactoryP50K()
+    public async Task FactoryP50K()
     {
         var client = TokenEvaluatorClientFactory.Create();
-        client.SetDefaultTokenEncoding(EncodingType.P50kBase);
+        await client.SetDefaultTokenEncodingAsync(EncodingType.P50kBase);
         var tokenCount = client.EncodedTokenCount(Constants.GeneratedText);
         Assert.AreEqual(tokenCount, 42);
     }

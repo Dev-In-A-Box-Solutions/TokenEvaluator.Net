@@ -18,7 +18,7 @@ public class PerformanceTests
     }
 
     [TestMethod]
-    public void CL100KPerformanceSpeed()
+    public async Task CL100KPerformanceSpeed()
     {
         if (serviceProvider == null)
         {
@@ -32,7 +32,7 @@ public class PerformanceTests
         }
 
         // Set the encoding type
-        tokenClient.SetDefaultTokenEncoding(EncodingType.Cl100kBase);
+        await tokenClient.SetDefaultTokenEncodingAsync(EncodingType.Cl100kBase);
 
         // Prepare the Stopwatch
         var stopwatch = new Stopwatch();
@@ -54,7 +54,7 @@ public class PerformanceTests
     }
 
     [TestMethod]
-    public void CL100KPerformanceMemoryUsage()
+    public async Task CL100KPerformanceMemoryUsage()
     {
         if (serviceProvider == null)
         {
@@ -75,9 +75,7 @@ public class PerformanceTests
         // Get the current memory usage
         long startMemory = GC.GetTotalMemory(true);
 
-        tokenClient.SetDefaultTokenEncoding(EncodingType.Cl100kBase);
-
-        // Perform the operation you want to measure
+        await tokenClient.SetDefaultTokenEncodingAsync(EncodingType.Cl100kBase); 
         var tokenCount = tokenClient.EncodedTokenCount(Constants.PerformanceTestString);
 
         // Force another garbage collection and get the end memory usage
@@ -97,7 +95,7 @@ public class PerformanceTests
     }
 
     [TestMethod]
-    public void CL100KPerformanceCPU()
+    public async Task CL100KPerformanceCPU()
     {
         if (serviceProvider == null)
         {
@@ -115,7 +113,7 @@ public class PerformanceTests
         // Get the current CPU usage for the process
         var startCpuUsage = currentProcess.TotalProcessorTime;
 
-        tokenClient.SetDefaultTokenEncoding(EncodingType.Cl100kBase);
+        await tokenClient.SetDefaultTokenEncodingAsync(EncodingType.Cl100kBase);
 
         // Perform the operation you want to measure
         var tokenCount = tokenClient.EncodedTokenCount(Constants.PerformanceTestString);
@@ -131,7 +129,7 @@ public class PerformanceTests
     }
 
     [TestMethod]
-    public void P50KPerformanceSpeed()
+    public async Task P50KPerformanceSpeed()
     {
         if (serviceProvider == null)
         {
@@ -145,7 +143,7 @@ public class PerformanceTests
         }
 
         // Set the encoding type
-        tokenClient.SetDefaultTokenEncoding(EncodingType.P50kBase);
+        await tokenClient.SetDefaultTokenEncodingAsync(EncodingType.P50kBase);
 
         // Prepare the Stopwatch
         var stopwatch = new Stopwatch();
@@ -167,7 +165,7 @@ public class PerformanceTests
     }
 
     [TestMethod]
-    public void P50KPerformanceMemoryUsage()
+    public async Task P50KPerformanceMemoryUsage()
     {
         if (serviceProvider == null)
         {
@@ -188,7 +186,7 @@ public class PerformanceTests
         // Get the current memory usage
         long startMemory = GC.GetTotalMemory(true);
 
-        tokenClient.SetDefaultTokenEncoding(EncodingType.P50kBase);
+        await tokenClient.SetDefaultTokenEncodingAsync(EncodingType.P50kBase);
 
         // Perform the operation you want to measure
         var tokenCount = tokenClient.EncodedTokenCount(Constants.PerformanceTestString);
@@ -210,7 +208,7 @@ public class PerformanceTests
     }
 
     [TestMethod]
-    public void P50KPerformanceCPU()
+    public async Task P50KPerformanceCPU()
     {
         if (serviceProvider == null)
         {
@@ -228,7 +226,7 @@ public class PerformanceTests
         // Get the current CPU usage for the process
         var startCpuUsage = currentProcess.TotalProcessorTime;
 
-        tokenClient.SetDefaultTokenEncoding(EncodingType.P50kBase);
+        await tokenClient.SetDefaultTokenEncodingAsync(EncodingType.P50kBase);
 
         // Perform the operation you want to measure
         var tokenCount = tokenClient.EncodedTokenCount(Constants.PerformanceTestString);

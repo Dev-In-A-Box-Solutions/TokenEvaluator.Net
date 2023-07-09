@@ -9,7 +9,7 @@ namespace TokenEvaluator.Net
         string Decode(List<int> tokens);
         int EncodedTokenCount(string text, object? allowedSpecial = null, object? disallowedSpecial = null);
         void OverridePairedByteEncodingDirectory(string directoryPath);
-        void SetDefaultTokenEncodingForModel(ModelType modelType);
-        void SetDefaultTokenEncoding(EncodingType encodingType);
+        Task SetDefaultTokenEncodingForModelAsync(ModelType modelType);
+        Task SetDefaultTokenEncodingAsync(EncodingType encodingType);
     }
 }

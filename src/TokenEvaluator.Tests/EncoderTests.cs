@@ -18,7 +18,7 @@ namespace TokenEvaluator.Tests
         }
 
         [TestMethod]
-        public void TestCL100kBaseUsingEncodingType()
+        public async Task TestCL100kBaseUsingEncodingType()
         {
             if (serviceProvider == null)
             {
@@ -29,7 +29,7 @@ namespace TokenEvaluator.Tests
             var tokenClient = serviceProvider.GetService<ITokenEvaluatorClient>();
             if (tokenClient != null)
             {
-                tokenClient.SetDefaultTokenEncoding(EncodingType.Cl100kBase);
+                await tokenClient.SetDefaultTokenEncodingAsync(EncodingType.Cl100kBase);
                 var tokenCount = tokenClient.EncodedTokenCount(Constants.GeneratedText);
                 Assert.AreEqual(tokenCount, 45);
             }
@@ -40,7 +40,7 @@ namespace TokenEvaluator.Tests
         }
 
         [TestMethod]
-        public void TestP50kBaseUsingEncodingType()
+        public async Task TestP50kBaseUsingEncodingType()
         {
             if (serviceProvider == null)
             {
@@ -51,7 +51,7 @@ namespace TokenEvaluator.Tests
             var tokenClient = serviceProvider.GetService<ITokenEvaluatorClient>();
             if (tokenClient != null)
             {
-                tokenClient.SetDefaultTokenEncoding(EncodingType.P50kBase);
+                await tokenClient.SetDefaultTokenEncodingAsync(EncodingType.P50kBase);
                 var tokenCount = tokenClient.EncodedTokenCount(Constants.GeneratedText);
                 Assert.AreEqual(tokenCount, 42);
             }
@@ -62,7 +62,7 @@ namespace TokenEvaluator.Tests
         }
 
         [TestMethod]
-        public void TestTextDavinci003UsingModelType()
+        public async Task TestTextDavinci003UsingModelType()
         {
             if (serviceProvider == null)
             {
@@ -73,7 +73,7 @@ namespace TokenEvaluator.Tests
             var tokenClient = serviceProvider.GetService<ITokenEvaluatorClient>();
             if (tokenClient != null)
             {
-                tokenClient.SetDefaultTokenEncodingForModel(ModelType.TextDavinci003);
+                await tokenClient.SetDefaultTokenEncodingForModelAsync(ModelType.TextDavinci003);
                 var tokenCount = tokenClient.EncodedTokenCount(Constants.GeneratedText);
                 Assert.AreEqual(tokenCount, 42);
             }
@@ -84,7 +84,7 @@ namespace TokenEvaluator.Tests
         }
 
         [TestMethod]
-        public void TestGpt35TurboUsingModelType()
+        public async Task TestGpt35TurboUsingModelType()
         {
             if (serviceProvider == null)
             {
@@ -95,7 +95,7 @@ namespace TokenEvaluator.Tests
             var tokenClient = serviceProvider.GetService<ITokenEvaluatorClient>();
             if (tokenClient != null)
             {
-                tokenClient.SetDefaultTokenEncodingForModel(ModelType.Gpt3_5Turbo);
+                await tokenClient.SetDefaultTokenEncodingForModelAsync(ModelType.Gpt3_5Turbo);
                 var tokenCount = tokenClient.EncodedTokenCount(Constants.GeneratedText);
                 Assert.AreEqual(tokenCount, 45);
             }
