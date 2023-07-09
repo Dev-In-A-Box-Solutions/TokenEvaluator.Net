@@ -19,6 +19,12 @@ Whether you're running an AI chatbot, a content generator, or any application th
 
 Unlock the power of accurate token count understanding with TokenEvaluator.Net - the essential tool for AI developers.
 
+## Supported Tokenizers
+These are the currently supported tokenizers:
+
+- CL100K
+- P50K
+
 # Getting Started
 
 TokenEvaluator.Net can be used via dependency injection, or an instance can be created using a tightly-coupled factory class.
