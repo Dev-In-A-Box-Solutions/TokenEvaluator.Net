@@ -52,10 +52,10 @@ public class PerformanceTests
         stopwatch.Stop();
 
         // log token count
-        Debug.WriteLine($"Token Count: {tokenCount}");
+        Trace.WriteLine($"Token Count: {tokenCount}");
 
         // Print out or do something with the elapsed time
-        Debug.WriteLine($"Elapsed time: {stopwatch.ElapsedMilliseconds} ms");
+        Trace.WriteLine($"Elapsed time: {stopwatch.ElapsedMilliseconds} ms");
     }
 
     [TestMethod]
@@ -93,9 +93,9 @@ public class PerformanceTests
         long memoryUsed = endMemory - startMemory;
 
         // log token count
-        Debug.WriteLine($"Token Count: {tokenCount}");
+        Trace.WriteLine($"Token Count: {tokenCount}");
 
-        Debug.WriteLine($"Memory used: {memoryUsed} bytes");
+        Trace.WriteLine($"Memory used: {memoryUsed} bytes");
     }
 
     [TestMethod]
@@ -126,9 +126,9 @@ public class PerformanceTests
         var cpuUsed = endCpuUsage - startCpuUsage;
 
         // log token count
-        Debug.WriteLine($"Token Count: {tokenCount}");
+        Trace.WriteLine($"Token Count: {tokenCount}");
 
-        Debug.WriteLine($"CPU used: {cpuUsed.TotalMilliseconds} milliseconds");
+        Trace.WriteLine($"CPU used: {cpuUsed.TotalMilliseconds} milliseconds");
     }
 
     [TestMethod]
@@ -160,10 +160,10 @@ public class PerformanceTests
         stopwatch.Stop();
 
         // log token count
-        Debug.WriteLine($"Token Count: {tokenCount}");
+        Trace.WriteLine($"Token Count: {tokenCount}");
 
         // Print out or do something with the elapsed time
-        Debug.WriteLine($"Elapsed time: {stopwatch.ElapsedMilliseconds} ms");
+        Trace.WriteLine($"Elapsed time: {stopwatch.ElapsedMilliseconds} ms");
     }
 
     [TestMethod]
@@ -203,9 +203,9 @@ public class PerformanceTests
         long memoryUsed = endMemory - startMemory;
 
         // log token count
-        Debug.WriteLine($"Token Count: {tokenCount}");
+        Trace.WriteLine($"Token Count: {tokenCount}");
 
-        Debug.WriteLine($"Memory used: {memoryUsed} bytes");
+        Trace.WriteLine($"Memory used: {memoryUsed} bytes");
     }
 
     [TestMethod]
@@ -236,8 +236,8 @@ public class PerformanceTests
         var cpuUsed = endCpuUsage - startCpuUsage;
 
         // log token count
-        Debug.WriteLine($"Token Count: {tokenCount}");
+        Trace.WriteLine($"Token Count: {tokenCount}");
 
-        Debug.WriteLine($"CPU used: {cpuUsed.TotalMilliseconds} milliseconds");
+        Trace.WriteLine($"CPU used: {cpuUsed.TotalMilliseconds} milliseconds");
     }
 }
