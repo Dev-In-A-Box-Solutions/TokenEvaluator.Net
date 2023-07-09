@@ -1,4 +1,4 @@
-name: main Build and Unit Tests
+name: develop Build and Unit Tests
 on:
   push:
     branches: [ "develop" ]
