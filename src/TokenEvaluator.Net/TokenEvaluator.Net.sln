@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33815.320
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TokenEvaluator.Net", "TokenEvaluator.Net.csproj", "{FBA106FF-57C4-4ADE-8296-8AE2E7193BA5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D170A6C6-03F2-4EBE-B052-C3341D6591AC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TokenEvaluator.Tests", "..\TokenEvaluator.Tests\TokenEvaluator.Tests.csproj", "{CAF3C3AC-0BDB-413F-85A6-129FA579F541}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FBA106FF-57C4-4ADE-8296-8AE2E7193BA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBA106FF-57C4-4ADE-8296-8AE2E7193BA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBA106FF-57C4-4ADE-8296-8AE2E7193BA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBA106FF-57C4-4ADE-8296-8AE2E7193BA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAF3C3AC-0BDB-413F-85A6-129FA579F541}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAF3C3AC-0BDB-413F-85A6-129FA579F541}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAF3C3AC-0BDB-413F-85A6-129FA579F541}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAF3C3AC-0BDB-413F-85A6-129FA579F541}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CAF3C3AC-0BDB-413F-85A6-129FA579F541} = {D170A6C6-03F2-4EBE-B052-C3341D6591AC}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4EDFD6F5-5FF4-4C25-8151-88A9E0B80874}
+	EndGlobalSection
+EndGlobal
