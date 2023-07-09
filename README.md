@@ -31,6 +31,12 @@ These are the currently supported tokenizers:
 - CL100K
 - P50K
 
+## NuGet Packages
+
+![logo64](https://github.com/Dev-In-A-Box-Solutions/TokenEvaluator.Net/assets/17493722/0fc0e333-1abe-4f54-8ad7-53ee7f7b8a9d)
+
+https://www.nuget.org/packages/TokenEvaluator.Net
+
 # Getting Started
 
 TokenEvaluator.Net can be used via dependency injection, or an instance can be created using a tightly-coupled factory class.
