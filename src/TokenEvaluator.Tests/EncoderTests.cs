@@ -18,7 +18,7 @@ namespace TokenEvaluator.Tests
         }
 
         [TestMethod]
-        public void TestC100kBaseUsingEncodingType()
+        public void TestCL100kBaseUsingEncodingType()
         {
             if (serviceProvider == null)
             {

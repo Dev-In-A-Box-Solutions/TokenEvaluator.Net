@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Text;
 using TokenEvaluator.Net;
 
 namespace TokenEvaluator.Tests;
@@ -19,7 +18,7 @@ public class PerformanceTests
     }
 
     [TestMethod]
-    public void C100KPerformanceSpeed()
+    public void CL100KPerformanceSpeed()
     {
         if (serviceProvider == null)
         {
@@ -55,7 +54,7 @@ public class PerformanceTests
     }
 
     [TestMethod]
-    public void C100KPerformanceMemoryUsage()
+    public void CL100KPerformanceMemoryUsage()
     {
         if (serviceProvider == null)
         {
@@ -98,7 +97,7 @@ public class PerformanceTests
     }
 
     [TestMethod]
-    public void C100KPerformanceCPU()
+    public void CL100KPerformanceCPU()
     {
         if (serviceProvider == null)
         {

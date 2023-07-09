@@ -6,7 +6,7 @@ namespace TokenEvaluator.Tests;
 public class FactoryInstanceTests
 {
     [TestMethod]
-    public void FactoryC100K()
+    public void FactoryCL100K()
     {
         var client = TokenEvaluatorClientFactory.Create();
         client.SetDefaultTokenEncoding(EncodingType.Cl100kBase);
