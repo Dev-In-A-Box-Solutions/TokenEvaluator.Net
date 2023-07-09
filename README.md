@@ -3,6 +3,7 @@
 ### Build Status
 [![main](https://github.com/JoeTomkinson/TokenEvaluator.Net/actions/workflows/main-build.yml/badge.svg)](https://github.com/JoeTomkinson/TokenEvaluator.Net/actions/workflows/main-build.yml)
 [![develop](https://github.com/JoeTomkinson/TokenEvaluator.Net/actions/workflows/develop-build.yml/badge.svg)](https://github.com/JoeTomkinson/TokenEvaluator.Net/actions/workflows/develop-build.yml)
+These are currently failing due to an issue with GitHub action directories, working to resolve that at the moment.
 
 ## Description
 TokenEvaluator.Net is a simple and useful library designed to measure and calculate the token count of given text inputs, as per the specifics of the language model specified by the user. This tool is crucial for efficient resource management when dealing with AI language models, such as OpenAI's GPT-3.5-turbo and others.
