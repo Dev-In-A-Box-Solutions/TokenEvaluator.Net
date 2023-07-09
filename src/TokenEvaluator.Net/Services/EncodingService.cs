@@ -39,22 +39,19 @@ public class EncodingService : IEncodingService
         _p50KBase = new P50kBase(_tokenizerProvider);
     }
 
-    public Task<TextTokenEncoding> GetEncodingFromModelAsync(ModelType modelType)
-    {
-        return GetEncodingAsync(_modelEncodingProvider.GetEncodingForModel(modelType));
-    }
+    public TextTokenEncoding GetEncodingFromModel(ModelType modelType) => GetEncoding(_modelEncodingProvider.GetEncodingForModel(modelType));
 
-    public async Task<TextTokenEncoding> GetEncodingAsync(EncodingType encodingType)
+    public TextTokenEncoding GetEncoding(EncodingType encodingType)
     {
         switch (encodingType)
         {
             case EncodingType.P50kBase:
                 {
-                    return await _p50KBase.GetEncodingAsync();
+                    return _p50KBase.GetEncoding();
                 }
             case EncodingType.Cl100kBase:
                 {
-                    return await _cl100k_base.GetEncodingAsync();
+                    return _cl100k_base.GetEncoding();
                 }
             default:
                 throw new NotImplementedException();

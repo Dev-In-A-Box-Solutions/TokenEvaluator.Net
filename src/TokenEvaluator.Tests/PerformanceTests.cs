@@ -8,31 +8,36 @@ public class PerformanceTests
 {
     internal readonly IServiceCollection services = new ServiceCollection();
     internal ServiceProvider? serviceProvider;
+    internal ITokenEvaluatorClient? tokenClient;
 
     [TestInitialize]
     public void Init()
     {
+        // init a service collection, run the extension method to add the library services, and build the service provider
         services.AddTextTokenizationEvaluatorServices();
         services.AddSingleton<ITokenEvaluatorClient, TokenEvaluatorClient>();
         serviceProvider = services.BuildServiceProvider();
+
+        // get the token client.
+        tokenClient = serviceProvider.GetService<ITokenEvaluatorClient>();
+        tokenClient?.OverridePairedByteEncodingDirectory(Path.Combine(Environment.CurrentDirectory, "TestDataFolder"));
     }
 
     [TestMethod]
-    public async Task CL100KPerformanceSpeed()
+    public void CL100KPerformanceSpeed()
     {
         if (serviceProvider == null)
         {
             Assert.Fail("Service Provider Null");
         }
 
-        var tokenClient = serviceProvider.GetService<ITokenEvaluatorClient>();
         if (tokenClient == null)
         {
             Assert.Fail("Token Client Null");
         }
 
         // Set the encoding type
-        await tokenClient.SetDefaultTokenEncodingAsync(EncodingType.Cl100kBase);
+        tokenClient.SetDefaultTokenEncoding(EncodingType.Cl100kBase);
 
         // Prepare the Stopwatch
         var stopwatch = new Stopwatch();
@@ -47,21 +52,20 @@ public class PerformanceTests
         stopwatch.Stop();
 
         // log token count
-        Debug.WriteLine($"Token Count: {tokenCount}");
+        Trace.WriteLine($"Token Count: {tokenCount}");
 
         // Print out or do something with the elapsed time
-        Debug.WriteLine($"Elapsed time: {stopwatch.ElapsedMilliseconds} ms");
+        Trace.WriteLine($"Elapsed time: {stopwatch.ElapsedMilliseconds} ms");
     }
 
     [TestMethod]
-    public async Task CL100KPerformanceMemoryUsage()
+    public void CL100KPerformanceMemoryUsage()
     {
         if (serviceProvider == null)
         {
             Assert.Fail("Service Provider Null");
         }
 
-        var tokenClient = serviceProvider.GetService<ITokenEvaluatorClient>();
         if (tokenClient == null)
         {
             Assert.Fail("Token Client Null");
@@ -75,7 +79,7 @@ public class PerformanceTests
         // Get the current memory usage
         long startMemory = GC.GetTotalMemory(true);
 
-        await tokenClient.SetDefaultTokenEncodingAsync(EncodingType.Cl100kBase); 
+        tokenClient.SetDefaultTokenEncoding(EncodingType.Cl100kBase); 
         var tokenCount = tokenClient.EncodedTokenCount(Constants.PerformanceTestString);
 
         // Force another garbage collection and get the end memory usage
@@ -89,20 +93,19 @@ public class PerformanceTests
         long memoryUsed = endMemory - startMemory;
 
         // log token count
-        Debug.WriteLine($"Token Count: {tokenCount}");
+        Trace.WriteLine($"Token Count: {tokenCount}");
 
-        Debug.WriteLine($"Memory used: {memoryUsed} bytes");
+        Trace.WriteLine($"Memory used: {memoryUsed} bytes");
     }
 
     [TestMethod]
-    public async Task CL100KPerformanceCPU()
+    public void CL100KPerformanceCPU()
     {
         if (serviceProvider == null)
         {
             Assert.Fail("Service Provider Null");
         }
 
-        var tokenClient = serviceProvider.GetService<ITokenEvaluatorClient>();
         if (tokenClient == null)
         {
             Assert.Fail("Token Client Null");
@@ -113,7 +116,7 @@ public class PerformanceTests
         // Get the current CPU usage for the process
         var startCpuUsage = currentProcess.TotalProcessorTime;
 
-        await tokenClient.SetDefaultTokenEncodingAsync(EncodingType.Cl100kBase);
+        tokenClient.SetDefaultTokenEncoding(EncodingType.Cl100kBase);
 
         // Perform the operation you want to measure
         var tokenCount = tokenClient.EncodedTokenCount(Constants.PerformanceTestString);
@@ -123,27 +126,26 @@ public class PerformanceTests
         var cpuUsed = endCpuUsage - startCpuUsage;
 
         // log token count
-        Debug.WriteLine($"Token Count: {tokenCount}");
+        Trace.WriteLine($"Token Count: {tokenCount}");
 
-        Debug.WriteLine($"CPU used: {cpuUsed.TotalMilliseconds} milliseconds");
+        Trace.WriteLine($"CPU used: {cpuUsed.TotalMilliseconds} milliseconds");
     }
 
     [TestMethod]
-    public async Task P50KPerformanceSpeed()
+    public void P50KPerformanceSpeed()
     {
         if (serviceProvider == null)
         {
             Assert.Fail("Service Provider Null");
         }
 
-        var tokenClient = serviceProvider.GetService<ITokenEvaluatorClient>();
         if (tokenClient == null)
         {
             Assert.Fail("Token Client Null");
         }
 
         // Set the encoding type
-        await tokenClient.SetDefaultTokenEncodingAsync(EncodingType.P50kBase);
+        tokenClient.SetDefaultTokenEncoding(EncodingType.P50kBase);
 
         // Prepare the Stopwatch
         var stopwatch = new Stopwatch();
@@ -158,21 +160,20 @@ public class PerformanceTests
         stopwatch.Stop();
 
         // log token count
-        Debug.WriteLine($"Token Count: {tokenCount}");
+        Trace.WriteLine($"Token Count: {tokenCount}");
 
         // Print out or do something with the elapsed time
-        Debug.WriteLine($"Elapsed time: {stopwatch.ElapsedMilliseconds} ms");
+        Trace.WriteLine($"Elapsed time: {stopwatch.ElapsedMilliseconds} ms");
     }
 
     [TestMethod]
-    public async Task P50KPerformanceMemoryUsage()
+    public void P50KPerformanceMemoryUsage()
     {
         if (serviceProvider == null)
         {
             Assert.Fail("Service Provider Null");
         }
 
-        var tokenClient = serviceProvider.GetService<ITokenEvaluatorClient>();
         if (tokenClient == null)
         {
             Assert.Fail("Token Client Null");
@@ -186,7 +187,7 @@ public class PerformanceTests
         // Get the current memory usage
         long startMemory = GC.GetTotalMemory(true);
 
-        await tokenClient.SetDefaultTokenEncodingAsync(EncodingType.P50kBase);
+        tokenClient.SetDefaultTokenEncoding(EncodingType.P50kBase);
 
         // Perform the operation you want to measure
         var tokenCount = tokenClient.EncodedTokenCount(Constants.PerformanceTestString);
@@ -202,20 +203,19 @@ public class PerformanceTests
         long memoryUsed = endMemory - startMemory;
 
         // log token count
-        Debug.WriteLine($"Token Count: {tokenCount}");
+        Trace.WriteLine($"Token Count: {tokenCount}");
 
-        Debug.WriteLine($"Memory used: {memoryUsed} bytes");
+        Trace.WriteLine($"Memory used: {memoryUsed} bytes");
     }
 
     [TestMethod]
-    public async Task P50KPerformanceCPU()
+    public void P50KPerformanceCPU()
     {
         if (serviceProvider == null)
         {
             Assert.Fail("Service Provider Null");
         }
 
-        var tokenClient = serviceProvider.GetService<ITokenEvaluatorClient>();
         if (tokenClient == null)
         {
             Assert.Fail("Token Client Null");
@@ -226,7 +226,7 @@ public class PerformanceTests
         // Get the current CPU usage for the process
         var startCpuUsage = currentProcess.TotalProcessorTime;
 
-        await tokenClient.SetDefaultTokenEncodingAsync(EncodingType.P50kBase);
+        tokenClient.SetDefaultTokenEncoding(EncodingType.P50kBase);
 
         // Perform the operation you want to measure
         var tokenCount = tokenClient.EncodedTokenCount(Constants.PerformanceTestString);
@@ -236,8 +236,8 @@ public class PerformanceTests
         var cpuUsed = endCpuUsage - startCpuUsage;
 
         // log token count
-        Debug.WriteLine($"Token Count: {tokenCount}");
+        Trace.WriteLine($"Token Count: {tokenCount}");
 
-        Debug.WriteLine($"CPU used: {cpuUsed.TotalMilliseconds} milliseconds");
+        Trace.WriteLine($"CPU used: {cpuUsed.TotalMilliseconds} milliseconds");
     }
 }

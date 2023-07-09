@@ -7,6 +7,7 @@ namespace TokenEvaluator.Tests
     {
         internal readonly IServiceCollection services = new ServiceCollection();
         internal ServiceProvider? serviceProvider;
+        internal ITokenEvaluatorClient? tokenClient;
 
         [TestInitialize]
         public void Init()
@@ -15,21 +16,23 @@ namespace TokenEvaluator.Tests
             services.AddTextTokenizationEvaluatorServices();
             services.AddSingleton<ITokenEvaluatorClient, TokenEvaluatorClient>();
             serviceProvider = services.BuildServiceProvider();
+
+            // get the token client.
+            tokenClient = serviceProvider.GetService<ITokenEvaluatorClient>();
+            tokenClient?.OverridePairedByteEncodingDirectory(Path.Combine(Environment.CurrentDirectory, "TestDataFolder"));
         }
 
         [TestMethod]
-        public async Task TestCL100kBaseUsingEncodingType()
+        public void TestCL100kBaseUsingEncodingType()
         {
             if (serviceProvider == null)
             {
                 Assert.Fail("Service Provider Null");
             }
 
-            // test we can retrieve the references to the interfaces.
-            var tokenClient = serviceProvider.GetService<ITokenEvaluatorClient>();
             if (tokenClient != null)
             {
-                await tokenClient.SetDefaultTokenEncodingAsync(EncodingType.Cl100kBase);
+                tokenClient.SetDefaultTokenEncoding(EncodingType.Cl100kBase);
                 var tokenCount = tokenClient.EncodedTokenCount(Constants.GeneratedText);
                 Assert.AreEqual(tokenCount, 45);
             }
@@ -40,18 +43,16 @@ namespace TokenEvaluator.Tests
         }
 
         [TestMethod]
-        public async Task TestP50kBaseUsingEncodingType()
+        public void TestP50kBaseUsingEncodingType()
         {
             if (serviceProvider == null)
             {
                 Assert.Fail("Service Provider Null");
             }
 
-            // test we can retrieve the references to the interfaces.
-            var tokenClient = serviceProvider.GetService<ITokenEvaluatorClient>();
             if (tokenClient != null)
             {
-                await tokenClient.SetDefaultTokenEncodingAsync(EncodingType.P50kBase);
+                tokenClient.SetDefaultTokenEncoding(EncodingType.P50kBase);
                 var tokenCount = tokenClient.EncodedTokenCount(Constants.GeneratedText);
                 Assert.AreEqual(tokenCount, 42);
             }
@@ -62,18 +63,16 @@ namespace TokenEvaluator.Tests
         }
 
         [TestMethod]
-        public async Task TestTextDavinci003UsingModelType()
+        public void TestTextDavinci003UsingModelType()
         {
             if (serviceProvider == null)
             {
                 Assert.Fail("Service Provider Null");
             }
 
-            // test we can retrieve the references to the interfaces.
-            var tokenClient = serviceProvider.GetService<ITokenEvaluatorClient>();
             if (tokenClient != null)
             {
-                await tokenClient.SetDefaultTokenEncodingForModelAsync(ModelType.TextDavinci003);
+                tokenClient.SetDefaultTokenEncodingForModel(ModelType.TextDavinci003);
                 var tokenCount = tokenClient.EncodedTokenCount(Constants.GeneratedText);
                 Assert.AreEqual(tokenCount, 42);
             }
@@ -84,18 +83,16 @@ namespace TokenEvaluator.Tests
         }
 
         [TestMethod]
-        public async Task TestGpt35TurboUsingModelType()
+        public void TestGpt35TurboUsingModelType()
         {
             if (serviceProvider == null)
             {
                 Assert.Fail("Service Provider Null");
             }
 
-            // test we can retrieve the references to the interfaces.
-            var tokenClient = serviceProvider.GetService<ITokenEvaluatorClient>();
             if (tokenClient != null)
             {
-                await tokenClient.SetDefaultTokenEncodingForModelAsync(ModelType.Gpt3_5Turbo);
+                tokenClient.SetDefaultTokenEncodingForModel(ModelType.Gpt3_5Turbo);
                 var tokenCount = tokenClient.EncodedTokenCount(Constants.GeneratedText);
                 Assert.AreEqual(tokenCount, 45);
             }

@@ -18,19 +18,13 @@ namespace TokenEvaluator.Net.Tokenizers
             TokenizerProvider?.SetPairedByteEncodingDirectory(directory);
         }
 
-        internal async Task<TextTokenEncoding?> GetEncodingAsync(bool useAssemblyCachedFile = false)
+        internal TextTokenEncoding? GetEncoding()
         {
             if (TokenizerProvider != null)
             {
                 Dictionary<byte[], int>? mergeableRanks;
-                if (useAssemblyCachedFile)
-                {
-                    mergeableRanks = TokenizerProvider.LoadFromInternal(EncodingType.P50kBase);
-                }
-                else
-                {
-                    mergeableRanks = await TokenizerProvider.LoadFromUrlOrCacheAsync(EncodingType.P50kBase);
-                }
+
+                mergeableRanks = TokenizerProvider.LoadFromInternal(EncodingType.P50kBase);
 
                 var specialTokens = new Dictionary<string, int>
                 {
