@@ -27,12 +27,20 @@ public class TokenEvaluatorClient : ITokenEvaluatorClient
         _pairedByteEncodingDirectory = Path.Combine(_localAppDataDirectory, FileConstants.PAIRED_BYTE_ENCODING_DIRECTORY);
     }
 
+    /// <summary>
+    /// Sets the default token encoding for the specified model type.
+    /// </summary>
+    /// <param name="modelType">The type of the model to set the default encoding for.</param>
     public void SetDefaultTokenEncodingForModel(ModelType modelType)
     {
         _textTokenEncoding = EncodingService.GetEncodingFromModel(modelType);
         _tokenizationEngine = new TokenizationEngine(_textTokenEncoding.MergeableRanks, _textTokenEncoding.SpecialTokens, _textTokenEncoding.PatternString);
     }
 
+    /// <summary>
+    /// Sets the default token encoding for the specified encoding type.
+    /// </summary>
+    /// <param name="encodingType">The type of encoding to set as default.</param>
     public void SetDefaultTokenEncoding(EncodingType encodingType)
     {
         _textTokenEncoding = EncodingService.GetEncoding(encodingType);
@@ -78,6 +86,13 @@ public class TokenEvaluatorClient : ITokenEvaluatorClient
         return _tokenizationEngine.EncodeNative(text, allowedSpecialSet).Item1;
     }
 
+    /// <summary>
+    /// Counts the number of encoded tokens in the given text.
+    /// </summary>
+    /// <param name="text">The text to encode.</param>
+    /// <param name="allowedSpecial">The allowed special tokens.</param>
+    /// <param name="disallowedSpecial">The disallowed special tokens.</param>
+    /// <returns>The count of encoded tokens in the text.</returns>
     public int EncodedTokenCount(string text, object? allowedSpecial = null, object? disallowedSpecial = null)
     {
         return Encode(text, allowedSpecial, disallowedSpecial)?.Count ?? 0;
