@@ -47,26 +47,29 @@ If you want to be able to inject an instance of this client into multiple method
 ```C#
 using TokenEvaluator.Net.Dependency;
 
-// Init a service collection, use the extension method to add the library services.
-IServiceCollection services = new ServiceCollection();
-services.AddTokenEvaluator.NetServices();
+internal readonly IServiceCollection services = new ServiceCollection();
+internal ServiceProvider? serviceProvider;
+internal ITokenEvaluatorClient? tokenClient;
+
+// init a service collection, run the extension method to add the library services, and build the service provider
+services.AddTextTokenizationEvaluatorServices();
 services.AddSingleton<ITokenEvaluatorClient, TokenEvaluatorClient>();
-var serviceProvider = services.BuildServiceProvider();
+serviceProvider = services.BuildServiceProvider();
+
+// get the token client.
+tokenClient = serviceProvider.GetService<ITokenEvaluatorClient>();
+tokenClient?.OverridePairedByteEncodingDirectory(Path.Combine(Environment.CurrentDirectory, "TestDataFolder"));
 ```
 
 Then simply inject the service into your class constructors like so:
 
 ```C#
-internal const string GeneratedText = "The quick, brown fox—enamored by the moonlit night—jumped over 10 lazily sleeping dogs near 123 Elm St. at approximately 7:30 PM. Isn't text tokenization interesting?";
+internal const string GeneratedText = "The quick, brown fox—enamoured by the moonlit night—jumped over 10 lazily sleeping dogs near 123 Elm St. at approximately 7:30 PM. Isn't text tokenization interesting?";
 
 public ClassConstructor(ITokenEvaluatorClient tokenClient)
 {
     // Set token encoding type
-    tokenClient.SetDefaultTokenEncoding(EncodingType.Cl100kBase);
-    var tokenCount = tokenClient.EncodedTokenCount(GeneratedText);
-
-    // or choose a supported model
-    tokenClient.SetDefaultTokenEncodingForModel(ModelType.TextDavinci003);
+    await tokenClient.SetDefaultTokenEncodingAsync(EncodingType.Cl100kBase);
     var tokenCount = tokenClient.EncodedTokenCount(GeneratedText);
 }
 ```
