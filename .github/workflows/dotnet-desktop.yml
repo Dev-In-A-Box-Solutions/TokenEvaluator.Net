@@ -1,11 +1,11 @@
 name: TokenEvaluator.NET Build and Unit Tests
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "develop" ]
     paths:
       - 'src/**'
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "develop"  ]
     paths:
       - 'src/**'
 
