@@ -39,31 +39,9 @@ public class EncodingService : IEncodingService
         _p50KBase = new P50kBase(_tokenizerProvider);
     }
 
-    public TextTokenEncoding GetEncodingFromModel(ModelType modelType)
-    {
-       return GetEncoding(_modelEncodingProvider.GetEncodingForModel(modelType));
-    }
-
     public Task<TextTokenEncoding> GetEncodingFromModelAsync(ModelType modelType)
     {
         return GetEncodingAsync(_modelEncodingProvider.GetEncodingForModel(modelType));
-    }
-
-    public TextTokenEncoding GetEncoding(EncodingType encodingType)
-    {
-        switch (encodingType)
-        {
-            case EncodingType.P50kBase:
-                {
-                    return _p50KBase.GetEncodingAsync().Result;
-                }
-            case EncodingType.Cl100kBase:
-                {
-                    return _cl100k_base.GetEncodingAsync().Result;
-                }
-            default:
-                throw new NotImplementedException();
-        }
     }
 
     public async Task<TextTokenEncoding> GetEncodingAsync(EncodingType encodingType)
