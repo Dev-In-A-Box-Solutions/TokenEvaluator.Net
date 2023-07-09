@@ -83,6 +83,6 @@ Using this as a concrete, tightly-coupled implementation is fairly straightforwa
 using TokenEvaluator.Net;
 
 var client = TokenEvaluatorClientFactory.Create();
-client.SetDefaultTokenEncoding(EncodingType.Cl100kBase);
-var tokenCount = client.EncodedTokenCount(Constants.GeneratedText);
+await client.SetDefaultTokenEncodingAsync(EncodingType.Cl100kBase);
+var tokenCount = client.EncodedTokenCount(GeneratedText);
 ```
