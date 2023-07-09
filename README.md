@@ -7,11 +7,10 @@ Whether you're running an AI chatbot, a content generator, or any application th
 
 ## Features:
 
-1. **Accurate token count calculation** based on the language model specified
-2. Supports a **range of popular AI language models**
-3. **Easy-to-use interface** with clear documentation
-4. **Lightweight and efficient design** suitable for integrated or standalone use
-5. **Open-source**, promoting community contributions and continuous improvement
+1. **Precise token count calculations** aligned with the specified language model
+2. Support for a diverse **array of popular AI language models**
+3. **Efficient and lightweight architecture** suitable for both integrated and standalone usage
+4. **Open-source**, fostering community contributions and ongoing enhancement
 
 Unlock the power of accurate token count understanding with TextTokenizationEvaluator - the essential tool for AI developers.
 
