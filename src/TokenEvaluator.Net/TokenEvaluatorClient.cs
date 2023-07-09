@@ -31,9 +31,9 @@ public class TokenEvaluatorClient : ITokenEvaluatorClient
     /// Sets the default token encoding for the specified model type.
     /// </summary>
     /// <param name="modelType">The type of the model to set the default encoding for.</param>
-    public async Task SetDefaultTokenEncodingForModelAsync(ModelType modelType)
+    public void SetDefaultTokenEncodingForModel(ModelType modelType)
     {
-        _textTokenEncoding = await EncodingService.GetEncodingFromModelAsync(modelType);
+        _textTokenEncoding = EncodingService.GetEncodingFromModel(modelType);
         _tokenizationEngine = new TokenizationEngine(_textTokenEncoding.MergeableRanks, _textTokenEncoding.SpecialTokens, _textTokenEncoding.PatternString);
     }
 
@@ -41,9 +41,9 @@ public class TokenEvaluatorClient : ITokenEvaluatorClient
     /// Sets the default token encoding for the specified encoding type.
     /// </summary>
     /// <param name="encodingType">The type of encoding to set as default.</param>
-    public async Task SetDefaultTokenEncodingAsync(EncodingType encodingType)
+    public void SetDefaultTokenEncoding(EncodingType encodingType)
     {
-        _textTokenEncoding = await EncodingService.GetEncodingAsync(encodingType);
+        _textTokenEncoding = EncodingService.GetEncoding(encodingType);
         _tokenizationEngine = new TokenizationEngine(_textTokenEncoding.MergeableRanks, _textTokenEncoding.SpecialTokens, _textTokenEncoding.PatternString);
     }
 
