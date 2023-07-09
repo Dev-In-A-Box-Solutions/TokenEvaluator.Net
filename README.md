@@ -1,9 +1,9 @@
-# TextTokenizationEvaluator
-The TextTokenizationEvaluator is a powerful library designed to measure and calculate the token count of given text inputs, as per the specifics of the language model specified by the user. This tool is crucial for efficient resource management when dealing with AI language models, such as OpenAI's GPT-3.5-turbo and others.
+# TokenEvaluator.Net
+The TokenEvaluator.Net is a powerful library designed to measure and calculate the token count of given text inputs, as per the specifics of the language model specified by the user. This tool is crucial for efficient resource management when dealing with AI language models, such as OpenAI's GPT-3.5-turbo and others.
 
 By providing a comprehensive and detailed evaluation of the token count, this library assists developers in understanding the cost, performance, and optimization aspects of their AI language model interactions.
 
-Whether you're running an AI chatbot, a content generator, or any application that leverages AI language models, understanding your token usage is fundamental. TextTokenizationEvaluator fills this gap, offering a clear, accurate, and easy-to-use solution.
+Whether you're running an AI chatbot, a content generator, or any application that leverages AI language models, understanding your token usage is fundamental. TokenEvaluator.Net fills this gap, offering a clear, accurate, and easy-to-use solution.
 
 ## Features:
 
@@ -12,21 +12,21 @@ Whether you're running an AI chatbot, a content generator, or any application th
 3. **Efficient and lightweight architecture** suitable for both integrated and standalone usage
 4. **Open-source**, fostering community contributions and ongoing enhancement
 
-Unlock the power of accurate token count understanding with TextTokenizationEvaluator - the essential tool for AI developers.
+Unlock the power of accurate token count understanding with TokenEvaluator.Net - the essential tool for AI developers.
 
 # Getting Started
 
-TextTokenizationEvaluator can be used via dependency injection, or an instance can be created using a tightly-coupled factory class.
+TokenEvaluator.Net can be used via dependency injection, or an instance can be created using a tightly-coupled factory class.
 
 ### Dependency Injection
 If you want to be able to inject an instance of this client into multiple methods, then you can make use of the libraries dependency injection extension to add all of the required interfaces and implementations to your service collection.
 
 ```C#
-using TextTokenizationEvaluator.Core.Dependency;
+using TokenEvaluator.Net.Dependency;
 
 // Init a service collection, use the extension method to add the library services.
 IServiceCollection services = new ServiceCollection();
-services.AddTextTokenizationEvaluatorServices();
+services.AddTokenEvaluator.NetServices();
 services.AddSingleton<ITokenEvaluatorClient, TokenEvaluatorClient>();
 var serviceProvider = services.BuildServiceProvider();
 ```
@@ -53,6 +53,9 @@ public ClassConstructor(ITokenEvaluatorClient tokenClient)
 Using this as a concrete, tightly-coupled implementation is fairly straightforward. Simply use the below code and all internal interface and service references will be initialised and tightly-coupled. This is difficult to write tests for within your application, but ultimately is the easiest way to implement the client.
 
 ```C#
+
+using TokenEvaluator.Net;
+
 var client = TokenEvaluatorClientFactory.Create();
 client.SetDefaultTokenEncoding(EncodingType.Cl100kBase);
 var tokenCount = client.EncodedTokenCount(Constants.GeneratedText);
