@@ -86,3 +86,10 @@ var client = TokenEvaluatorClientFactory.Create();
 client.SetDefaultTokenEncoding(EncodingType.Cl100kBase);
 var tokenCount = client.EncodedTokenCount(GeneratedText);
 ```
+
+### Extract Token Pairs
+This library can be used, similar to other alternatives to extract the byte-encoded pair value from any given string.
+
+```C#
+var tokenPairValues = tokenClient.Encode(Constants.GeneratedText);
+```
