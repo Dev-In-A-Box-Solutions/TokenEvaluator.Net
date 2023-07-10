@@ -69,7 +69,7 @@ internal const string GeneratedText = "The quick, brown fox—enamoured by the m
 public ClassConstructor(ITokenEvaluatorClient tokenClient)
 {
     // Set token encoding type
-    await tokenClient.SetDefaultTokenEncodingAsync(EncodingType.Cl100kBase);
+    tokenClient.SetDefaultTokenEncoding(EncodingType.Cl100kBase);
     var tokenCount = tokenClient.EncodedTokenCount(GeneratedText);
 }
 ```
@@ -83,6 +83,6 @@ Using this as a concrete, tightly-coupled implementation is fairly straightforwa
 using TokenEvaluator.Net;
 
 var client = TokenEvaluatorClientFactory.Create();
-await client.SetDefaultTokenEncodingAsync(EncodingType.Cl100kBase);
+client.SetDefaultTokenEncoding(EncodingType.Cl100kBase);
 var tokenCount = client.EncodedTokenCount(GeneratedText);
 ```
