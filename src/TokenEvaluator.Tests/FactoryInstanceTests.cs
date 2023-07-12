@@ -18,7 +18,7 @@ public class FactoryInstanceTests
     public void FactoryP50K()
     {
         var client = TokenEvaluatorClientFactory.Create();
-        client.SetDefaultTokenEncoding(EncodingType.P50kBase);
+        client.SetDefaultTokenEncoding(EncodingType.R50kBase);
         var tokenCount = client.EncodedTokenCount(Constants.GeneratedText);
         Assert.AreEqual(tokenCount, 42);
     }

@@ -6,11 +6,11 @@ using TokenEvaluator.Net.Services.Contracts;
 
 namespace TokenEvaluator.Net.Tokenizers
 {
-    internal class Cl100kBase
+    internal class P50kBase
     {
         internal BaseTokenizerProvider TokenizerProvider { get; set; }
 
-        public Cl100kBase(BaseTokenizerProvider tokenizerProvider)
+        public P50kBase(BaseTokenizerProvider tokenizerProvider)
         {
             TokenizerProvider = tokenizerProvider ?? throw new ArgumentNullException(nameof(tokenizerProvider));
         }
@@ -24,20 +24,20 @@ namespace TokenEvaluator.Net.Tokenizers
         {
             if (TokenizerProvider != null)
             {
-                Dictionary<byte[], int>? mergeableRanks = TokenizerProvider.LoadFromInternal(EncodingType.Cl100kBase);
+                Dictionary<byte[], int>? mergeableRanks = TokenizerProvider.LoadFromInternal(EncodingType.P50kBase);
                 return new TextTokenEncoding()
                 {
-                    Name = "cl100k_base",
-                    PatternString = @"(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\r\n\p{L}\p{N}]?\p{L}+|\p{N}{1,3}| ?[^\s\p{L}\p{N}]+[\r\n]*|\s*[\r\n]+|\s+(?!\S)|\s+",
+                    Name = "p50k_edit",
+                    ExplicitNVocab = 50281,
+                    PatternString = @"'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+",
                     MergeableRanks = mergeableRanks ?? new Dictionary<byte[], int>(),
                     SpecialTokens = new Dictionary<string, int>
                     {
-                        { TextMarkerConstants.ENDOFTEXT, 100257},
-                        { TextMarkerConstants.FIM_PREFIX, 100258},
-                        { TextMarkerConstants.FIM_MIDDLE, 100259},
-                        { TextMarkerConstants.FIM_SUFFIX, 100260},
-                        { TextMarkerConstants.ENDOFPROMPT, 100276}
-                    }
+                        { TextMarkerConstants.ENDOFTEXT, 50256},
+                        { TextMarkerConstants.FIM_PREFIX, 50281},
+                        { TextMarkerConstants.FIM_MIDDLE, 50282},
+                        { TextMarkerConstants.FIM_SUFFIX, 50283},
+                    },
                 };
             }
             return default;

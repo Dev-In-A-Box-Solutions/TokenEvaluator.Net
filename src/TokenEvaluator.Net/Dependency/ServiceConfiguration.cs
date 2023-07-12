@@ -2,15 +2,17 @@
 using TokenEvaluator.Net.Services;
 using TokenEvaluator.Net.Services.Contracts;
 
-namespace TokenEvaluator.Net.Dependency;
-
-public static class ServiceConfiguration
+namespace TokenEvaluator.Net.Dependency
 {
-    public static IServiceCollection AddTextTokenizationEvaluatorServices(this IServiceCollection services)
+    public static class ServiceConfiguration
     {
-        services.AddSingleton<BaseTokenizerProvider, TokenizerProviderService>();
-        services.AddSingleton<IEncodingService, EncodingService>();
-        services.AddSingleton<IModelEncodingProvider, ModelEncodingProvider>();
-        return services;
+        public static IServiceCollection AddTextTokenizationEvaluatorServices(this IServiceCollection services)
+        {
+            services.AddSingleton<IEmbeddedResourceQuery, EmbeddedResourceQuery>();
+            services.AddSingleton<BaseTokenizerProvider, TokenizerProviderService>();
+            services.AddSingleton<IEncodingService, EncodingService>();
+            services.AddSingleton<IModelEncodingProvider, ModelEncodingProvider>();
+            return services;
+        }
     }
 }

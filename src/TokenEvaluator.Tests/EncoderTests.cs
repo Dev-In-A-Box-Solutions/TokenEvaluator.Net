@@ -23,6 +23,27 @@ namespace TokenEvaluator.Tests
         }
 
         [TestMethod]
+        public void TestRoBERTaBaseUsingEncodingType()
+        {
+            if (serviceProvider == null)
+            {
+                Assert.Fail("Service Provider Null");
+            }
+
+            if (tokenClient != null)
+            {
+                tokenClient.SetDefaultTokenEncoding(EncodingType.RoBERTa);
+                var tokenCount = tokenClient.EncodedTokenCount(Constants.GeneratedText);
+                
+                Assert.AreEqual(tokenCount, 45);
+            }
+            else
+            {
+                Assert.Fail("Token Client Null");
+            }
+        }
+
+        [TestMethod]
         public void TestCL100kBaseUsingEncodingType()
         {
             if (serviceProvider == null)
@@ -53,6 +74,26 @@ namespace TokenEvaluator.Tests
             if (tokenClient != null)
             {
                 tokenClient.SetDefaultTokenEncoding(EncodingType.P50kBase);
+                var tokenCount = tokenClient.EncodedTokenCount(Constants.GeneratedText);
+                Assert.AreEqual(tokenCount, 42);
+            }
+            else
+            {
+                Assert.Fail("Token Client Null");
+            }
+        }
+
+        [TestMethod]
+        public void TestR50kBaseUsingEncodingType()
+        {
+            if (serviceProvider == null)
+            {
+                Assert.Fail("Service Provider Null");
+            }
+
+            if (tokenClient != null)
+            {
+                tokenClient.SetDefaultTokenEncoding(EncodingType.R50kBase);
                 var tokenCount = tokenClient.EncodedTokenCount(Constants.GeneratedText);
                 Assert.AreEqual(tokenCount, 42);
             }
@@ -101,5 +142,126 @@ namespace TokenEvaluator.Tests
                 Assert.Fail("Token Client Null");
             }
         }
+
+        [TestMethod]
+        public void TestUnsafeNativeCount()
+        {
+            if (serviceProvider == null)
+            {
+                Assert.Fail("Service Provider Null");
+            }
+
+            if (tokenClient != null)
+            {
+                tokenClient.SetDefaultTokenEncoding(EncodingType.Cl100kBase);
+                var tokenCount = tokenClient.EncodedTokenCount(Constants.GeneratedText, true);
+                Assert.AreEqual(tokenCount, 45);
+            }
+            else
+            {
+                Assert.Fail("Token Client Null");
+            }
+        }
+
+        [TestMethod]
+        public void TestManagedNativeCount()
+        {
+            if (serviceProvider == null)
+            {
+                Assert.Fail("Service Provider Null");
+            }
+
+            if (tokenClient != null)
+            {
+                tokenClient.SetDefaultTokenEncoding(EncodingType.Cl100kBase);
+                var tokenCount = tokenClient.EncodedTokenCount(Constants.GeneratedText, false);
+                Assert.AreEqual(tokenCount, 45);
+            }
+            else
+            {
+                Assert.Fail("Token Client Null");
+            }
+        }
+
+        [TestMethod]
+        public void TestCL100kBaseCountUsingParallelProcessing()
+        {
+            if (serviceProvider == null)
+            {
+                Assert.Fail("Service Provider Null");
+            }
+
+            if (tokenClient != null)
+            {
+                tokenClient.SetDefaultTokenEncoding(EncodingType.Cl100kBase);
+                var tokenCount = tokenClient.EncodedTokenCount(Constants.PerformanceFraneknstein);
+                Assert.AreEqual(tokenCount, 5975);
+            }
+            else
+            {
+                Assert.Fail("Token Client Null");
+            }
+        }
+
+        [TestMethod]
+        public void TestCL100kBaseCountUsingNonParallelProcessing()
+        {
+            if (serviceProvider == null)
+            {
+                Assert.Fail("Service Provider Null");
+            }
+
+            if (tokenClient != null)
+            {
+                tokenClient.SetDefaultTokenEncoding(EncodingType.Cl100kBase);
+                var tokenCount = tokenClient.EncodedTokenCount(Constants.PerformanceFraneknstein, false);
+                Assert.AreEqual(tokenCount, 5975);
+            }
+            else
+            {
+                Assert.Fail("Token Client Null");
+            }
+        }
+
+        [TestMethod]
+        public void TestCL100kBaseEncodeDecodeUsingParallelProcessing()
+        {
+            if (serviceProvider == null)
+            {
+                Assert.Fail("Service Provider Null");
+            }
+
+            if (tokenClient != null)
+            {
+                tokenClient.SetDefaultTokenEncoding(EncodingType.Cl100kBase);
+                var tokens = tokenClient.Encode(Constants.PerformanceFraneknstein, true);
+                var decodedText = tokenClient.Decode(tokens, true);
+            }
+            else
+            {
+                Assert.Fail("Token Client Null");
+            }
+        }
+
+        [TestMethod]
+        public void TestCL100kBaseEncodeDecodeUsingNonParallelProcessing()
+        {
+            if (serviceProvider == null)
+            {
+                Assert.Fail("Service Provider Null");
+            }
+
+            if (tokenClient != null)
+            {
+                tokenClient.SetDefaultTokenEncoding(EncodingType.Cl100kBase);
+                var tokens = tokenClient.Encode(Constants.PerformanceFraneknstein, false);
+                var decodedText = tokenClient.Decode(tokens, false);
+            }
+            else
+            {
+                Assert.Fail("Token Client Null");
+            }
+        }
+
     }
 }

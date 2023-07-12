@@ -1,21 +1,23 @@
 ﻿using TokenEvaluator.Net.Services;
 using TokenEvaluator.Net.Services.Contracts;
 
-namespace TokenEvaluator.Net;
-
-/// <summary>
-/// This is a concrete, tightly-coupled factory class that creates a TokenEvaluatorClient instance.
-/// </summary>
-public static class TokenEvaluatorClientFactory
+namespace TokenEvaluator.Net
 {
-    public static TokenEvaluatorClient Create()
+    /// <summary>
+    /// This is a concrete, tightly-coupled factory class that creates a TokenEvaluatorClient instance.
+    /// </summary>
+    public static class TokenEvaluatorClientFactory
     {
-        ModelEncodingProvider modelEncodingProvider = new();
-        TokenizerProviderService tokenizerProviderService = new();
+        public static TokenEvaluatorClient Create()
+        {
+            var embeddedResourceQuery = new EmbeddedResourceQuery();
+            var modelEncodingProvider = new ModelEncodingProvider();
+            var tokenizerProviderService = new TokenizerProviderService(embeddedResourceQuery);
 
-        // Create EncodingService directly instead of retrieving from a service provider
-        IEncodingService encodingService = new EncodingService(modelEncodingProvider, tokenizerProviderService);
+            // Create EncodingService directly instead of retrieving from a service provider
+            IEncodingService encodingService = new EncodingService(modelEncodingProvider, tokenizerProviderService);
 
-        return new TokenEvaluatorClient(encodingService);
+            return new TokenEvaluatorClient(encodingService);
+        }
     }
 }

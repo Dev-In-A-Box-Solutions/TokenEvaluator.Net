@@ -1,14 +1,16 @@
-﻿using TokenEvaluator.Net.Constants;
+﻿using System;
+using System.Collections.Generic;
+using TokenEvaluator.Net.Constants;
 using TokenEvaluator.Net.Models;
 using TokenEvaluator.Net.Services.Contracts;
 
 namespace TokenEvaluator.Net.Tokenizers
 {
-    internal class P50kBase
+    internal class R50kBase
     {
         internal BaseTokenizerProvider TokenizerProvider { get; set; }
 
-        public P50kBase(BaseTokenizerProvider tokenizerProvider)
+        public R50kBase(BaseTokenizerProvider tokenizerProvider)
         {
             TokenizerProvider = tokenizerProvider ?? throw new ArgumentNullException(nameof(tokenizerProvider));
         }
@@ -22,23 +24,18 @@ namespace TokenEvaluator.Net.Tokenizers
         {
             if (TokenizerProvider != null)
             {
-                Dictionary<byte[], int>? mergeableRanks;
-
-                mergeableRanks = TokenizerProvider.LoadFromInternal(EncodingType.P50kBase);
-
-                var specialTokens = new Dictionary<string, int>
-                {
-                    {TextMarkerConstants.ENDOFTEXT, 50256}
-                };
-
+                Dictionary<byte[], int>? mergeableRanks = TokenizerProvider.LoadFromInternal(EncodingType.R50kBase);
                 return new TextTokenEncoding()
                 {
                     Name = "p50k_base",
-                    ExplicitNVocab = 50281,
+                    ExplicitNVocab = 50257,
                     PatternString = @"'s|'t|'re|'ve|'m|'ll|'d| ?\p{L}+| ?\p{N}+| ?[^\s\p{L}\p{N}]+|\s+(?!\S)|\s+",
                     MergeableRanks = mergeableRanks ?? new Dictionary<byte[], int>(),
-                    SpecialTokens = specialTokens
-                };
+                    SpecialTokens = new Dictionary<string, int>
+                    {
+                        [TextMarkerConstants.ENDOFTEXT] = 50256,
+                    }
+            };
             }
             return default;
         }

@@ -1,96 +1,65 @@
-﻿using System.Reflection;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text;
-using TokenEvaluator.Net.Constants;
 using TokenEvaluator.Net.EncodingUtils;
 using TokenEvaluator.Net.Models;
 using TokenEvaluator.Net.Services.Contracts;
 
-namespace TokenEvaluator.Net.Services;
-
-internal class TokenizerProviderService : BaseTokenizerProvider
+namespace TokenEvaluator.Net.Services
 {
-    public override Dictionary<byte[], int>? LoadFromInternal(EncodingType encodingType)
+    internal class TokenizerProviderService : BaseTokenizerProvider
     {
-        var directory = "Assets";
-        var fullPath = string.Empty;
-
-        switch (encodingType)
+        public TokenizerProviderService(IEmbeddedResourceQuery embeddedResourceQuery) : base(embeddedResourceQuery)
         {
-            case EncodingType.Cl100kBase:
-                fullPath = Path.Combine(directory, "TikToken", "cl100k_base.tiktoken");
-                break;
-            case EncodingType.P50kBase:
-                fullPath = Path.Combine(directory, "TikToken", "p50k_base.tiktoken");
-                break;
         }
 
-        if (!string.IsNullOrEmpty(fullPath))
+        public override Dictionary<byte[], int>? LoadFromInternal(EncodingType encodingType)
         {
-            // Since we're working with file paths relative to the output directory,
-            // we need to resolve them to absolute paths based on the current assembly location.
-            var assemblyLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var absolutePath = Path.Combine(assemblyLocation, fullPath);
+            var directory = "Encodings";
+            var fullPath = string.Empty;
 
-            if (!File.Exists(absolutePath))
+            switch (encodingType)
             {
-                throw new FileNotFoundException($"The file {absolutePath} does not exist.");
+                case EncodingType.Cl100kBase:
+                    fullPath = Path.Combine(directory, "tiktoken", "cl100k_base.tiktoken");
+                    break;
+                case EncodingType.R50kBase:
+                    fullPath = Path.Combine(directory, "tiktoken", "r50k_base.tiktoken");
+                    break;
+                case EncodingType.P50kBase:
+                    fullPath = Path.Combine(directory, "tiktoken", "p50k_base.tiktoken");
+                    break;
             }
 
-            var contents = File.ReadAllLines(absolutePath, Encoding.UTF8);
-            var pairedByteEncodingDict = new Dictionary<byte[], int>(contents.Length, new ByteArrayComparer());
-
-            foreach (var line in contents.Where(l => !string.IsNullOrWhiteSpace(l)))
+            if (!string.IsNullOrEmpty(fullPath))
             {
-                var tokens = line.Split();
-                var tokenBytes = Convert.FromBase64String(tokens[0]);
-                var rank = int.Parse(tokens[1]);
-                pairedByteEncodingDict.Add(tokenBytes, rank);
+                using var stream = EmbeddedResourceQuery.Read<TokenizerProviderService>(fullPath) ?? throw new FileNotFoundException($"The file {fullPath} does not exist.");
+                using var reader = new StreamReader(stream);
+                switch (encodingType)
+                {
+                    case EncodingType.Cl100kBase:
+                    case EncodingType.R50kBase:
+                    case EncodingType.P50kBase:
+#if NETSTANDARD2_1_OR_GREATER || NET6_0_OR_GREATER
+                        var contents = reader.ReadToEnd().Split(Environment.NewLine);
+#else
+                        var contents = reader.ReadToEnd().Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+#endif
+                        var pairedByteEncodingDict = new Dictionary<byte[], int>(contents.Length, new ByteArrayComparer());
+                        foreach (var line in contents.Where(l => !string.IsNullOrWhiteSpace(l)))
+                        {
+                            var tokens = line.Split();
+                            var tokenBytes = Convert.FromBase64String(tokens[0]);
+                            var rank = int.Parse(tokens[1]);
+                            pairedByteEncodingDict.Add(tokenBytes, rank);
+                        }
+                        return pairedByteEncodingDict;
+                }
             }
-            return pairedByteEncodingDict;
+            return default;
         }
-        return default;
     }
-
-
-
-
-    /// <summary>
-    /// Loads the given encoding type from the libraries local content directory.
-    /// </summary>
-    /// <param name="encodingType"></param>
-    /// <returns></returns>
-    //public override Dictionary<byte[], int>? LoadFromInternal(EncodingType encodingType)
-    //{
-    //    var directory = "assets/tiktoken";
-    //    var fullPath = string.Empty;
-
-    //    switch (encodingType)
-    //    {
-    //        case EncodingType.Cl100kBase:
-    //            fullPath = Path.Combine(directory, "cl100k_base.tiktoken");
-    //            break;
-    //        case EncodingType.P50kBase:
-    //            fullPath = Path.Combine(directory, "p50k_base.tiktoken");
-    //            break;
-    //    }
-
-    //    var assemblyLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-    //    var absolutePath = Path.Combine(assemblyLocation, fullPath);
-
-    //    if (!string.IsNullOrEmpty(fullPath))
-    //    {
-    //        var contents = File.ReadAllLines(fullPath, Encoding.UTF8);
-    //        var pairedByteEncodingDict = new Dictionary<byte[], int>(contents.Length, new ByteArrayComparer());
-
-    //        foreach (var line in contents.Where(l => !string.IsNullOrWhiteSpace(l)))
-    //        {
-    //            var tokens = line.Split();
-    //            var tokenBytes = Convert.FromBase64String(tokens[0]);
-    //            var rank = int.Parse(tokens[1]);
-    //            pairedByteEncodingDict.Add(tokenBytes, rank);
-    //        }
-    //        return pairedByteEncodingDict;
-    //    }
-    //    return default;
-    //}
 }

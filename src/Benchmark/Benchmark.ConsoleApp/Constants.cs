@@ -1,6 +1,6 @@
-﻿namespace TokenEvaluator.Tests;
+﻿namespace Benchmark.ConsoleApp.Constants;
 
-internal class Constants
+internal class TestConstants
 {
     /// <summary>
     /// Tests the text tokenization with a variety of language features including:

@@ -1,10 +1,11 @@
 ﻿using TokenEvaluator.Net.Models;
 
-namespace TokenEvaluator.Net.Services.Contracts;
-
-public interface IEncodingService
+namespace TokenEvaluator.Net.Services.Contracts
 {
-    void SetPairedByteEncodingDirectory(string directory);
-    TextTokenEncoding GetEncodingFromModel(ModelType modelType);
-    TextTokenEncoding GetEncoding(EncodingType encodingType);
+    public interface IEncodingService
+    {
+        void SetPairedByteEncodingDirectory(string directory);
+        TextTokenEncoding GetEncodingFromModel(ModelType modelType);
+        TextTokenEncoding GetEncoding(EncodingType encodingType);
+    }
 }

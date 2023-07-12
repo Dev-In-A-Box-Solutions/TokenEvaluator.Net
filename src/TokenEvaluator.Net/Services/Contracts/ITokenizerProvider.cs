@@ -1,8 +1,10 @@
-﻿using TokenEvaluator.Net.Models;
+﻿using System.Collections.Generic;
+using TokenEvaluator.Net.Models;
 
-namespace TokenEvaluator.Net.Services.Contracts;
-
-public interface ITokenizerProvider
+namespace TokenEvaluator.Net.Services.Contracts
 {
-    public Dictionary<byte[], int>? LoadFromInternal(EncodingType encodingType);
+    public interface ITokenizerProvider
+    {
+        public Dictionary<byte[], int>? LoadFromInternal(EncodingType encodingType);
+    }
 }
