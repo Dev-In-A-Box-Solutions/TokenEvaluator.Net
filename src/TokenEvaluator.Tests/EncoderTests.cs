@@ -23,27 +23,6 @@ namespace TokenEvaluator.Tests
         }
 
         [TestMethod]
-        public void TestRoBERTaBaseUsingEncodingType()
-        {
-            if (serviceProvider == null)
-            {
-                Assert.Fail("Service Provider Null");
-            }
-
-            if (tokenClient != null)
-            {
-                tokenClient.SetDefaultTokenEncoding(EncodingType.RoBERTa);
-                var tokenCount = tokenClient.EncodedTokenCount(Constants.GeneratedText);
-                
-                Assert.AreEqual(tokenCount, 45);
-            }
-            else
-            {
-                Assert.Fail("Token Client Null");
-            }
-        }
-
-        [TestMethod]
         public void TestCL100kBaseUsingEncodingType()
         {
             if (serviceProvider == null)

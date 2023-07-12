@@ -70,6 +70,7 @@ namespace TokenEvaluator.Net
         /// Decodes the specified list of token IDs into text.
         /// </summary>
         /// <param name="tokens">The list of token IDs.</param>
+        /// <param name="useParallelProcessing">Specifies whether to use parallel processing. Default is true.</param>
         /// <returns>The decoded text.</returns>
         public string Decode(List<int> tokens, bool useParallelProcessing = true)
         {
@@ -82,6 +83,7 @@ namespace TokenEvaluator.Net
         /// </summary>
         /// <param name="text">The text to encode.</param>
         /// <param name="allowedSpecial">The allowed special tokens.</param>
+        /// <param name="useParallelProcessing">Specifies whether to use parallel processing. Default is true.</param>
         /// <param name="disallowedSpecial">The disallowed special tokens.</param>
         /// <returns>A list of token IDs representing the encoded text.</returns>
         public List<int> Encode(string text, bool useParallelProcessing = true, object? allowedSpecial = null, object? disallowedSpecial = null)
@@ -111,7 +113,7 @@ namespace TokenEvaluator.Net
         /// Special tokens allowed and disallowed can be specified through the 'allowedSpecial' and 'disallowedSpecial' parameters.
         /// </summary>
         /// <param name="text">The text to be tokenized and counted.</param>
-        /// <param name="useUnsafe">Specifies whether to use the unsafe native implementation. Default is true.</param>
+        /// <param name="useUnsafe">Specifies whether to use the unsafe native implementation. Default is false.</param>
         /// <param name="useParallelProcessing">Specifies whether to use parallel processing for the safe implementation. Default is true.</param>
         /// <param name="allowedSpecial">Specifies special tokens to be allowed in the text. Can be a string specifying "all", null (no special tokens allowed), or an IEnumerable of specific tokens.</param>
         /// <param name="disallowedSpecial">Specifies special tokens to be disallowed in the text. Can be a string specifying "all", null (no special tokens disallowed), or an IEnumerable of specific tokens.</param>
@@ -120,7 +122,7 @@ namespace TokenEvaluator.Net
         /// This method can be set to utilize unsafe code under certain conditions. For more information on the implications and handling of unsafe code in C#, refer to the Microsoft C# Documentation: 
         /// <see href="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/unsafe">Click here to view.</see>
         /// </remarks>
-        public int EncodedTokenCount(string text, bool useUnsafe = true, bool useParallelProcessing = true, object? allowedSpecial = null, object? disallowedSpecial = null)
+        public int EncodedTokenCount(string text, bool useUnsafe = false, bool useParallelProcessing = true, object? allowedSpecial = null, object? disallowedSpecial = null)
         {
             if (useUnsafe)
             {
