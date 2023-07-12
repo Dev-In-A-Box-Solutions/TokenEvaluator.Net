@@ -1,8 +1,9 @@
 ﻿using TokenEvaluator.Net.Models;
 
-namespace TokenEvaluator.Net.Services.Contracts;
-
-public interface IModelEncodingProvider
+namespace TokenEvaluator.Net.Services.Contracts
 {
-   public EncodingType GetEncodingForModel(ModelType modelType);
+    public interface IModelEncodingProvider
+    {
+        public EncodingType GetEncodingForModel(ModelType modelType);
+    }
 }
