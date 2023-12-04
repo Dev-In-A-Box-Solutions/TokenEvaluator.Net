@@ -63,7 +63,7 @@ namespace Benchmark.ConsoleApp
         public void TiktokenSharp_EncodeDecode()
         {
             var encoded = tikToken.Encode(TestConstants.PerformanceFraneknstein);
-            var decoded = tikToken.Decode(encoded);
+            _ = tikToken.Decode(encoded);
         }
 
         [Benchmark]
@@ -71,7 +71,7 @@ namespace Benchmark.ConsoleApp
         public void SharpToken_EncodeDecode()
         {
             var encoded = encoding.Encode(TestConstants.PerformanceFraneknstein);
-            var decoded = encoding.Decode(encoded);
+            _ = encoding.Decode(encoded);
         }
 
         [Benchmark]
@@ -79,7 +79,7 @@ namespace Benchmark.ConsoleApp
         public void TokenEvaluatorNet_EncodeDecode()
         {
             var encoded = tokenClient.Encode(TestConstants.PerformanceFraneknstein);
-            var decoded = tokenClient.Decode(encoded);
+            _ = tokenClient.Decode(encoded);
         }
 
         [Benchmark]
@@ -87,56 +87,95 @@ namespace Benchmark.ConsoleApp
         public void TikToken_EncodeDecode()
         {
             var encoded = ogTiktokenEncoding.Encode(TestConstants.PerformanceFraneknstein);
-            var decoded = ogTiktokenEncoding.Decode(encoded);
+            _ = ogTiktokenEncoding.Decode(encoded);
         }
 
         [Benchmark]
         [BenchmarkCategory("CountOperations")]
         public void TiktokenSharp_CountSpeed()
         {
-            var count = tikToken.Encode(TestConstants.PerformanceFraneknstein)?.Count;
+            _ = tikToken.Encode(TestConstants.PerformanceFraneknstein)?.Count;
         }
 
         [Benchmark]
         [BenchmarkCategory("CountOperations")]
         public void SharpToken_CountSpeed()
         {
-            var count = encoding.Encode(TestConstants.PerformanceFraneknstein)?.Count;
+            _ = encoding.Encode(TestConstants.PerformanceFraneknstein)?.Count;
         }
 
         [Benchmark]
         [BenchmarkCategory("CountOperations")]
-        public void TokenEvaluatorNet_Managed_NonParallel_CountSpeed()
+        public void TokenEvaluatorNet_Safe_NonParallel_CountSpeed()
         {
-            var count = tokenClient.EncodedTokenCount(TestConstants.PerformanceFraneknstein, false, false);
+            _ = tokenClient.EncodedTokenCount(TestConstants.PerformanceFraneknstein, false, false);
         }
 
         [Benchmark]
         [BenchmarkCategory("CountOperations")]
         public void TokenEvaluatorNet_Unsafe_NonParallel_CountSpeed()
         {
-            var count = tokenClient.EncodedTokenCount(TestConstants.PerformanceFraneknstein, true, false);
+            _ = tokenClient.EncodedTokenCount(TestConstants.PerformanceFraneknstein, true, false);
         }
 
         [Benchmark]
         [BenchmarkCategory("CountOperations")]
-        public void TokenEvaluatorNet_Managed_Parallel_CountSpeed()
+        public void TokenEvaluatorNet_Safe_Parallel_CountSpeed()
         {
-            var count = tokenClient.EncodedTokenCount(TestConstants.PerformanceFraneknstein, false, false);
+            _ = tokenClient.EncodedTokenCount(TestConstants.PerformanceFraneknstein, false, false);
         }
 
         [Benchmark]
         [BenchmarkCategory("CountOperations")]
         public void TokenEvaluatorNet_Unsafe_Parallel_CountSpeed()
         {
-            var count = tokenClient.EncodedTokenCount(TestConstants.PerformanceFraneknstein, true, false);
+            _ = tokenClient.EncodedTokenCount(TestConstants.PerformanceFraneknstein, true, false);
         }
 
         [Benchmark]
         [BenchmarkCategory("CountOperations")]
         public void TikToken_CountSpeed()
         {
-            var count = ogTiktokenEncoding.CountTokens(TestConstants.PerformanceFraneknstein);
+            _ = ogTiktokenEncoding.CountTokens(TestConstants.PerformanceFraneknstein);
         }
+
+        #region TokenEvaluator Large String
+
+        [Benchmark]
+        [BenchmarkCategory("TokenEvaluator")]
+        public void EncodeDecode()
+        {
+            var encoded = tokenClient.Encode(TestConstants.PerformanceTestString);
+            _ = tokenClient.Decode(encoded);
+        }
+
+        [Benchmark]
+        [BenchmarkCategory("TokenEvaluator")]
+        public void Safe_NonParallel_CountSpeed()
+        {
+            _ = tokenClient.EncodedTokenCount(TestConstants.PerformanceTestString, false, false);
+        }
+
+        [Benchmark]
+        [BenchmarkCategory("TokenEvaluator")]
+        public void Unsafe_NonParallel_CountSpeed()
+        {
+            _ = tokenClient.EncodedTokenCount(TestConstants.PerformanceTestString, true, false);
+        }
+
+        [Benchmark]
+        [BenchmarkCategory("TokenEvaluator")]
+        public void Safe_Parallel_CountSpeed()
+        {
+            _ = tokenClient.EncodedTokenCount(TestConstants.PerformanceTestString, false, false);
+        }
+
+        [Benchmark]
+        [BenchmarkCategory("TokenEvaluator")]
+        public void Unsafe_Parallel_CountSpeed()
+        {
+            _ = tokenClient.EncodedTokenCount(TestConstants.PerformanceTestString, true, false);
+        }
+        #endregion
     }
 }

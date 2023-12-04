@@ -19,7 +19,7 @@ namespace TokenEvaluator.Net
         private TokenizationEngine _tokenizationEngine;
         private TextTokenEncoding _textTokenEncoding;
         private string _pairedByteEncodingDirectory;
-        private IEncodingService _encodingService;
+        private readonly IEncodingService _encodingService;
 
         /// <summary>
         /// Enable cache for fast encoding. This is only supported for the unsafe native token count method.
@@ -74,8 +74,16 @@ namespace TokenEvaluator.Net
         /// <returns>The decoded text.</returns>
         public string Decode(List<int> tokens, bool useParallelProcessing = true)
         {
-            var ret = _tokenizationEngine.DecodeNative(tokens.ToArray(), useParallelProcessing);
-            return Encoding.UTF8.GetString(ret.ToArray());
+            if (useParallelProcessing)
+            {
+                var ret = _tokenizationEngine.ParallelDecodeNative(tokens.ToArray());
+                return Encoding.UTF8.GetString(ret.ToArray());
+            }
+            else
+            {
+                var ret = _tokenizationEngine.DecodeNative(tokens.ToArray());
+                return Encoding.UTF8.GetString(ret.ToArray());
+            }
         }
 
         /// <summary>
@@ -104,7 +112,14 @@ namespace TokenEvaluator.Net
 
             CheckDisallowedSpecial(text, disallowedSpecialSet);
 
-            return _tokenizationEngine.EncodeNative(text, allowedSpecialSet, useParallelProcessing).Item1;
+            if (useParallelProcessing)
+            {
+                return _tokenizationEngine.ParallelEncodeNative(text, allowedSpecialSet).Item1;
+            }
+            else
+            {
+                return _tokenizationEngine.EncodeNative(text, allowedSpecialSet).Item1;
+            }
         }
 
         /// <summary>
@@ -216,6 +231,61 @@ namespace TokenEvaluator.Net
         {
             var inner = string.Join("|", tokens.Select(Regex.Escape));
             return new Regex($"({inner})");
+        }
+
+        /// <summary>
+        /// <para>Based on the OpenAI API documentation for Vision enabled models (as of 04/12/2023), to calculate the token count of an image, you need to consider the size of the image and the detail option on each image_url block.</para>
+        /// <para>If the detail option is set to "low", the token cost is a fixed 85 tokens, regardless of the size of the image.</para>
+        /// <para>If the detail option is set to "high", the process is a bit more complex:</para>
+        /// <para>The image is first scaled to fit within a 2048 x 2048 square, maintaining their aspect ratio.</para>
+        /// <para>Then, it is scaled such that the shortest side of the image is 768px long.</para>
+        /// <para>The image is divided into 512px squares. Each of those squares costs 170 tokens.</para>
+        /// <para>Finally, an additional 85 tokens are always added to the final total.</para>
+        /// </summary>
+        /// <param name="width">Width of the image in pixels.</param>
+        /// <param name="height">Height of the image in pixels.</param>
+        /// <param name="detail">Detail level of the image, can be either 'Low' or 'High'.</param>
+        /// <returns>Token Count for Image</returns>
+        public int VisionTokenCount(int width, int height, DetailLevel detail)
+        {
+            if (detail == DetailLevel.Low)
+            {
+                return 85;
+            }
+            else if (detail == DetailLevel.High)
+            {
+                // Scale the image to fit within a 2048 x 2048 square
+                if (width > 2048 || height > 2048)
+                {
+                    float aspectRatio = (float)width / height;
+                    if (width > height)
+                    {
+                        width = 2048;
+                        height = (int)(width / aspectRatio);
+                    }
+                    else
+                    {
+                        height = 2048;
+                        width = (int)(height * aspectRatio);
+                    }
+                }
+                // Scale the image such that the shortest side is 768px long
+                float scaleRatio = width < height ? 768f / width : 768f / height;
+                width = (int)(width * scaleRatio);
+                height = (int)(height * scaleRatio);
+                // Count how many 512px squares the image consists of
+                int squareWidthCount = (int)Math.Ceiling(width / 512.0);
+                int squareHeightCount = (int)Math.Ceiling(height / 512.0);
+                int totalSquares = squareWidthCount * squareHeightCount;
+                // Each of those squares costs 170 tokens
+                int tokenCost = totalSquares * 170;
+                // Add 85 tokens to the final total
+                return tokenCost + 85;
+            }
+            else
+            {
+                return 85;
+            }
         }
     }
 }

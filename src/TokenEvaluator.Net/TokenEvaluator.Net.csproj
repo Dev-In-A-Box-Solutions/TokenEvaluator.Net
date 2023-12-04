@@ -16,10 +16,10 @@
     <RepositoryUrl>https://github.com/Dev-In-A-Box-Solutions/TokenEvaluator.Net</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>Tokenizer; Token; Text-To-Token-Count; Token-Count;</PackageTags>
-    <AssemblyVersion>1.0.5</AssemblyVersion>
+    <AssemblyVersion>1.0.6</AssemblyVersion>
     <NeutralLanguage>en</NeutralLanguage>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageReleaseNotes>Support for .NET6, .Net Standard 2.0, and 2.1 Added. Moved assets to embedded resources and improved read speed capabilities.</PackageReleaseNotes>
+    <PackageReleaseNotes>Optimizations.</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <FileVersion>$(AssemblyVersion)</FileVersion>
