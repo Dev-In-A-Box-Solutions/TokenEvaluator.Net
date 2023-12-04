@@ -15,11 +15,11 @@
     <PackageIcon>icon.png</PackageIcon>
     <RepositoryUrl>https://github.com/Dev-In-A-Box-Solutions/TokenEvaluator.Net</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>Tokenizer; Token; Text-To-Token-Count; Token-Count;</PackageTags>
-    <AssemblyVersion>1.0.6</AssemblyVersion>
+    <PackageTags>Image-To-Token-Count; Token; Text-To-Token-Count; Token-Count;</PackageTags>
+    <AssemblyVersion>1.0.7</AssemblyVersion>
     <NeutralLanguage>en</NeutralLanguage>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageReleaseNotes>Optimizations.</PackageReleaseNotes>
+    <PackageReleaseNotes>OpenAI Vision Preview Model Image Token Count</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <FileVersion>$(AssemblyVersion)</FileVersion>
@@ -42,7 +42,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Linq" Version="4.3.0" />
   </ItemGroup>

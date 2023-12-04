@@ -30,6 +30,18 @@ These are the currently supported tokenizers:
 - P50K
 - R50K
 
+## Supported Vision Models
+
+These are the currently supported vision models:
+
+- gpt-4-vision-preview
+
+Based on the OpenAI API documentation for Vision enabled models (as of 04/12/2023), to calculate the token count of an image, you need to consider the size of the image and the detail option on each image_url block.</para>
+
+- If the detail option is set to "low", the token cost is a fixed 85 tokens, regardless of the size of the image.
+- If the detail option is set to "high", the process is a bit more complex:
+    - The image is first scaled to fit within a 2048 x 2048 square, maintaining their aspect ratio. Then, it is scaled such that the shortest side of the image is 768px long. The image is divided into 512px squares. Each of those squares costs 170 tokens. Finally, an additional 85 tokens are always added to the final total.
+
 ## NuGet Packages
 
 ![logo64](https://github.com/Dev-In-A-Box-Solutions/TokenEvaluator.Net/assets/17493722/0fc0e333-1abe-4f54-8ad7-53ee7f7b8a9d)
