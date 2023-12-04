@@ -7,7 +7,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using TokenEvaluator.Net.EncodingUtils;
-using static System.Text.RegularExpressions.Regex;
 
 namespace TokenEvaluator.Net.Tokenizers
 {
@@ -21,11 +20,11 @@ namespace TokenEvaluator.Net.Tokenizers
         private readonly Regex _specialRegex;
         private readonly Regex _regex;
         private readonly Lazy<IReadOnlyDictionary<int, byte[]>> _lazyDecoder;
-        private IReadOnlyDictionary<int, byte[]> _decoder => _lazyDecoder.Value;
+        private IReadOnlyDictionary<int, byte[]> Decoder => _lazyDecoder.Value;
         private readonly IReadOnlyDictionary<int, string> _specialTokensDecoder;
-        private IReadOnlyDictionary<string, int> _fastEncoder { get; set; }
-        private IDictionary<string, IReadOnlyCollection<int>> _cache { get; set; } = new ConcurrentDictionary<string, IReadOnlyCollection<int>>();
-        private IDictionary<string, int> _cacheCounts { get; set; } = new ConcurrentDictionary<string, int>();
+        private IReadOnlyDictionary<string, int> FastEncoder { get; set; }
+        private IDictionary<string, IReadOnlyCollection<int>> Cache { get; set; } = new ConcurrentDictionary<string, IReadOnlyCollection<int>>();
+        private IDictionary<string, int> CachedCounts { get; set; } = new ConcurrentDictionary<string, int>();
 
         internal bool EnableCache { get; set; } = true;
 
@@ -38,7 +37,7 @@ namespace TokenEvaluator.Net.Tokenizers
         public TokenizationEngine(Dictionary<byte[], int> encoder, Dictionary<string, int> specialTokensEncoder, string pattern)
         {
             _encoder = encoder;
-            _fastEncoder = _encoder
+            FastEncoder = _encoder
             .ToDictionary(
                 static x => new string(x.Key.Select(y => (char)y).ToArray()),
                 static x => x.Value);
@@ -96,11 +95,11 @@ namespace TokenEvaluator.Net.Tokenizers
                     var piece = Encoding.UTF8.GetBytes(matchValue);
                     int numberOfTokens = 0;
 
-                    if (_fastEncoder.ContainsKey(fastKey))
+                    if (FastEncoder.ContainsKey(fastKey))
                     {
                         numberOfTokens++;
                     }
-                    else if (EnableCache && _cacheCounts.TryGetValue(fastKey, out int toks))
+                    else if (EnableCache && CachedCounts.TryGetValue(fastKey, out int toks))
                     {
                         numberOfTokens = toks;
                     }
@@ -114,7 +113,7 @@ namespace TokenEvaluator.Net.Tokenizers
 
                         if (EnableCache)
                         {
-                            _cacheCounts[fastKey] = numberOfTokens;
+                            CachedCounts[fastKey] = numberOfTokens;
                         }
                     }
                     Interlocked.Add(ref tokens, numberOfTokens);
@@ -137,12 +136,12 @@ namespace TokenEvaluator.Net.Tokenizers
                     var matchValue = match.Value;
                     var fastKey = matchValue;
 #endif
-                    if (_fastEncoder.ContainsKey(fastKey))
+                    if (FastEncoder.ContainsKey(fastKey))
                     {
                         tokens++;
                         continue;
                     }
-                    if (EnableCache && _cacheCounts.TryGetValue(fastKey, out var fastNumberOfTokens))
+                    if (EnableCache && CachedCounts.TryGetValue(fastKey, out var fastNumberOfTokens))
                     {
                         tokens += fastNumberOfTokens;
                         continue;
@@ -160,7 +159,7 @@ namespace TokenEvaluator.Net.Tokenizers
 
                     if (EnableCache)
                     {
-                        _cacheCounts[fastKey] = numberOfTokens;
+                        CachedCounts[fastKey] = numberOfTokens;
                     }
                 }
             }
@@ -270,7 +269,7 @@ namespace TokenEvaluator.Net.Tokenizers
         /// <param name="text">The text to encode.</param>
         /// <param name="allowedSpecial">The set of allowed special tokens.</param>
         /// <returns>A tuple containing the list of encoded tokens and the length of the last piece token.</returns>
-        public (List<int>, int) EncodeNative(string text, HashSet<string> allowedSpecial, bool useParallelProcessing = true)
+        public (List<int>, int) ParallelEncodeNative(string text, HashSet<string> allowedSpecial)
         {
             var ret = new List<int>();
             int start = 0;
@@ -297,45 +296,21 @@ namespace TokenEvaluator.Net.Tokenizers
 #else
                 var matches = _regex.Matches(text.Substring(start, end - start)).Cast<Match>();
 #endif
-                if (useParallelProcessing)
+                var concurrentTokensList = new ConcurrentBag<List<int>>();
+                Parallel.ForEach(matches, mat =>
                 {
-                    var concurrentTokensList = new ConcurrentBag<List<int>>();
-                    Parallel.ForEach(matches, mat =>
+                    var piece = Encoding.UTF8.GetBytes(mat.Value);
+                    if (_encoder.TryGetValue(piece, out int token))
                     {
-                        var piece = Encoding.UTF8.GetBytes(mat.Value);
-                        if (_encoder.TryGetValue(piece, out int token))
-                        {
-                            concurrentTokensList.Add(new List<int> { token });
-                        }
-                        else
-                        {
-                            var tokens = BytePairEncoding.BytePairEncode(piece, _encoder);
-                            concurrentTokensList.Add(tokens);
-                        }
-                    });
-                    ret.AddRange(concurrentTokensList.SelectMany(x => x));
-                }
-                else
-                {
-                    var tokensList = new List<List<int>>();
-                    foreach (var mat in matches)
-                    {
-                        var piece = Encoding.UTF8.GetBytes(mat.Value);
-                        if (_encoder.TryGetValue(piece, out int token))
-                        {
-                            tokensList.Add(new List<int> { token });
-                        }
-                        else
-                        {
-                            var tokens = BytePairEncoding.BytePairEncode(piece, _encoder);
-                            tokensList.Add(tokens);
-                        }
+                        concurrentTokensList.Add(new List<int> { token });
                     }
-                    foreach (var tokens in tokensList)
+                    else
                     {
-                        ret.AddRange(tokens);
+                        var tokens = BytePairEncoding.BytePairEncode(piece, _encoder);
+                        concurrentTokensList.Add(tokens);
                     }
-                }
+                });
+                ret.AddRange(concurrentTokensList.SelectMany(x => x));
 
                 if (nextSpecial.Success)
                 {
@@ -359,56 +334,118 @@ namespace TokenEvaluator.Net.Tokenizers
         /// <param name="tokens">The tokens to decode.</param>
         /// <param name="useParallelProcessing">If true, decodes tokens in parallel.</param>
         /// <returns>The decoded byte array.</returns>
-        public byte[] DecodeNative(int[] tokens, bool useParallelProcessing = true)
+        public byte[] ParallelDecodeNative(int[] tokens)
         {
-            if (useParallelProcessing)
+            var retParallel = new ConcurrentBag<byte>();
+            Parallel.ForEach(tokens, token =>
             {
-                var retParallel = new ConcurrentBag<byte>();
-                Parallel.ForEach(tokens, token =>
+                byte[] tokenBytes;
+                if (Decoder.TryGetValue(token, out var value))
                 {
-                    byte[] tokenBytes;
-                    if (_decoder.TryGetValue(token, out var value))
-                    {
-                        tokenBytes = value;
-                    }
-                    else if (_specialTokensDecoder.TryGetValue(token, out var valueS))
-                    {
-                        tokenBytes = Encoding.UTF8.GetBytes(valueS);
-                    }
-                    else
-                    {
-                        return;
-                    }
+                    tokenBytes = value;
+                }
+                else if (_specialTokensDecoder.TryGetValue(token, out var valueS))
+                {
+                    tokenBytes = Encoding.UTF8.GetBytes(valueS);
+                }
+                else
+                {
+                    return;
+                }
 
-                    foreach (var b in tokenBytes)
-                    {
-                        retParallel.Add(b);
-                    }
-                });
-                return retParallel.ToArray();
-            }
-            else
-            {
-                var ret = new List<byte>();
-                foreach (var token in tokens)
+                foreach (var b in tokenBytes)
                 {
-                    byte[] tokenBytes;
-                    if (_decoder.TryGetValue(token, out var value))
+                    retParallel.Add(b);
+                }
+            });
+            return retParallel.ToArray();
+        }
+
+        /// <summary>
+        /// Encodes the provided text into a list of tokens.
+        /// </summary>
+        /// <param name="text">The text to encode.</param>
+        /// <param name="allowedSpecial">The set of allowed special tokens.</param>
+        /// <returns>A tuple containing the list of encoded tokens and the length of the last piece token.</returns>
+        public (List<int>, int) EncodeNative(string text, HashSet<string> allowedSpecial)
+        {
+            var ret = new List<int>();
+            int start = 0;
+            int lastPieceTokenLen = 0;
+
+            while (true)
+            {
+                Match nextSpecial;
+                int startFind = start;
+                while (true)
+                {
+                    nextSpecial = _specialRegex.Match(text, startFind);
+                    if (!nextSpecial.Success)
+                        break;
+                    if (allowedSpecial.Contains(nextSpecial.Value))
+                        break;
+                    startFind = nextSpecial.Index + 1;
+                }
+
+                int end = nextSpecial.Success ? nextSpecial.Index : text.Length;
+
+                foreach (Match mat in _regex.Matches(text.Substring(start, end - start)))
+                {
+                    var piece = Encoding.UTF8.GetBytes(mat.Value);
+                    if (_encoder.TryGetValue(piece, out int token))
                     {
-                        tokenBytes = value;
-                    }
-                    else if (_specialTokensDecoder.TryGetValue(token, out var valueS))
-                    {
-                        tokenBytes = Encoding.UTF8.GetBytes(valueS);
-                    }
-                    else
-                    {
+                        lastPieceTokenLen = 1;
+                        ret.Add(token);
                         continue;
                     }
-                    ret.AddRange(tokenBytes);
+
+                    var tokens = BytePairEncoding.BytePairEncode(piece, _encoder);
+                    lastPieceTokenLen = tokens.Count;
+                    ret.AddRange(tokens);
                 }
-                return ret.ToArray();
+
+                if (nextSpecial.Success)
+                {
+                    var piece = nextSpecial.Value;
+                    var token = _specialTokensEncoder[piece];
+                    ret.Add(token);
+                    start = nextSpecial.Index + nextSpecial.Length;
+                    lastPieceTokenLen = 0;
+                }
+                else
+                {
+                    break;
+                }
             }
+            return (ret, lastPieceTokenLen);
+        }
+
+        /// <summary>
+        /// Decodes the provided tokens into a byte array.
+        /// </summary>
+        /// <param name="tokens">The tokens to decode.</param>
+        /// <returns>The decoded byte array.</returns>
+        public byte[] DecodeNative(int[] tokens)
+        {
+            var ret = new List<byte>(tokens.Length * 2);
+            foreach (var token in tokens)
+            {
+                byte[] tokenBytes;
+                if (Decoder.TryGetValue(token, out var value))
+                {
+                    tokenBytes = value;
+                }
+                else if (_specialTokensDecoder.TryGetValue(token, out var valueS))
+                {
+                    tokenBytes = Encoding.UTF8.GetBytes(valueS);
+                }
+                else
+                {
+                    continue;
+                }
+                ret.AddRange(tokenBytes);
+            }
+            return ret.ToArray();
         }
     }
 }
