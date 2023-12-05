@@ -16,7 +16,7 @@
     <RepositoryUrl>https://github.com/Dev-In-A-Box-Solutions/TokenEvaluator.Net</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>Image-To-Token-Count; Token; Text-To-Token-Count; Token-Count;</PackageTags>
-    <AssemblyVersion>1.0.7</AssemblyVersion>
+    <AssemblyVersion>1.0.8</AssemblyVersion>
     <NeutralLanguage>en</NeutralLanguage>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageReleaseNotes>OpenAI Vision Preview Model Image Token Count</PackageReleaseNotes>
