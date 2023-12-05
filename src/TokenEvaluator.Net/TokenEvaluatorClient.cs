@@ -246,8 +246,12 @@ namespace TokenEvaluator.Net
         /// <param name="height">Height of the image in pixels.</param>
         /// <param name="detail">Detail level of the image, can be either 'Low' or 'High'.</param>
         /// <returns>Token Count for Image</returns>
-        public int VisionTokenCount(int width, int height, DetailLevel detail)
+        public double VisionTokenCount(int width, int height, DetailLevel detail)
         {
+            // move from int to doubles for the purpose of the calculations
+            double widthDouble = width;
+            double heightDouble = height;
+
             if (detail == DetailLevel.Low)
             {
                 return 85;
@@ -255,30 +259,30 @@ namespace TokenEvaluator.Net
             else if (detail == DetailLevel.High)
             {
                 // Scale the image to fit within a 2048 x 2048 square
-                if (width > 2048 || height > 2048)
+                if (widthDouble > 2048 || heightDouble > 2048)
                 {
-                    float aspectRatio = (float)width / height;
-                    if (width > height)
+                    double aspectRatio = widthDouble / heightDouble;
+                    if (widthDouble > heightDouble)
                     {
-                        width = 2048;
-                        height = (int)(width / aspectRatio);
+                        widthDouble = 2048;
+                        heightDouble = widthDouble / aspectRatio;
                     }
                     else
                     {
-                        height = 2048;
-                        width = (int)(height * aspectRatio);
+                        heightDouble = 2048;
+                        widthDouble = heightDouble * aspectRatio;
                     }
                 }
                 // Scale the image such that the shortest side is 768px long
-                float scaleRatio = width < height ? 768f / width : 768f / height;
-                width = (int)(width * scaleRatio);
-                height = (int)(height * scaleRatio);
+                double scaleRatio = widthDouble < heightDouble ? 768.0 / widthDouble : 768.0 / heightDouble;
+                widthDouble *= scaleRatio;
+                heightDouble *= scaleRatio;
                 // Count how many 512px squares the image consists of
-                int squareWidthCount = (int)Math.Ceiling(width / 512.0);
-                int squareHeightCount = (int)Math.Ceiling(height / 512.0);
-                int totalSquares = squareWidthCount * squareHeightCount;
+                double squareWidthCount = Math.Ceiling(widthDouble / 512.0);
+                double squareHeightCount = Math.Ceiling(heightDouble / 512.0);
+                double totalSquares = squareWidthCount * squareHeightCount;
                 // Each of those squares costs 170 tokens
-                int tokenCost = totalSquares * 170;
+                double tokenCost = totalSquares * 170;
                 // Add 85 tokens to the final total
                 return tokenCost + 85;
             }

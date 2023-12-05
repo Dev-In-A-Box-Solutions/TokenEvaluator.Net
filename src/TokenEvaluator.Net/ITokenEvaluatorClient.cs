@@ -12,6 +12,6 @@ namespace TokenEvaluator.Net
         void OverridePairedByteEncodingDirectory(string directoryPath);
         void SetDefaultTokenEncodingForModel(ModelType modelType);
         void SetDefaultTokenEncoding(EncodingType encodingType);
-        int VisionTokenCount(int width, int height, DetailLevel detail);
+        double VisionTokenCount(int width, int height, DetailLevel detail);
     }
 }
